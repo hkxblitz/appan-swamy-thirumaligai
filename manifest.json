@@ -1,0 +1,15 @@
+{
+  "name": "Thirumaligai Admin",
+  "short_name": "Appan Admin",
+  "start_url": "/admin.html",
+  "display": "standalone",
+  "background_color": "#fffbeb",
+  "theme_color": "#9a3412",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2904/2904973.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
