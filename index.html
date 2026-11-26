@@ -7,294 +7,277 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@600;700;800&family=Noto+Sans+Devanagari:wght@500;700&family=Noto+Serif+Tamil:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Devanagari:wght@500;600;700&family=Noto+Serif+Tamil:wght@400;600;700&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --kumkum: #6E1409;
+      --kumkum-deep: #430A04;
+      --saffron: #B9380C;
+      --gold: #C5933E;
+      --parchment: #FBF7F0;
+      --paper: #FFFFFF;
+      --rule: #DDD0BE;
+    }
     body {
       font-family: 'Plus Jakarta Sans', 'Noto Serif Tamil', sans-serif;
-      background-color: #FFF8EE;
-      background-image:
-        radial-gradient(circle at 15% 15%, rgba(251, 146, 60, 0.12), transparent 35%),
-        radial-gradient(circle at 85% 30%, rgba(220, 38, 38, 0.08), transparent 40%),
-        radial-gradient(#D9770618 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 26px 26px;
+      background-color: var(--parchment);
+      color: #1F1916;
     }
-    .font-display { font-family: 'Cinzel Decorative', 'Cinzel', 'Noto Serif Tamil', serif; }
+    .font-editorial { font-family: 'Newsreader', 'Noto Serif Tamil', serif; }
     .font-heritage { font-family: 'Cinzel', 'Noto Serif Tamil', serif; }
     .font-tamil { font-family: 'Noto Serif Tamil', serif; }
     .font-sanskrit { font-family: 'Noto Sans Devanagari', serif; }
+    .font-mono-meta { font-family: 'IBM Plex Mono', monospace; }
 
-    @keyframes spinSlow {
+    /* Precision SVG Stroke-Draw Seal Animation */
+    @keyframes drawSeal {
+      0% { stroke-dashoffset: 260; fill-opacity: 0; }
+      65% { stroke-dashoffset: 0; fill-opacity: 0; }
+      100% { stroke-dashoffset: 0; fill-opacity: 1; }
+    }
+    @keyframes chakraRotate {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
-    @keyframes spinReverse {
-      from { transform: rotate(360deg); }
-      to { transform: rotate(0deg); }
+    .seal-path {
+      stroke-dasharray: 260;
+      stroke-dashoffset: 0;
+      animation: drawSeal 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
-    @keyframes pulseGlow {
-      0%, 100% { filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.55)); transform: scale(1); }
-      50% { filter: drop-shadow(0 0 22px rgba(251, 191, 36, 0.9)); transform: scale(1.04); }
-    }
-    .animate-mandala { animation: spinSlow 45s linear infinite; }
-    .animate-mandala-rev { animation: spinReverse 60s linear infinite; }
-    .animate-thiruman { animation: pulseGlow 4s ease-in-out infinite; }
-
-    .card-lift {
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
-    }
-    .card-lift:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 14px 30px -10px rgba(154, 52, 18, 0.18);
+    .chakra-slow {
+      transform-origin: center;
+      animation: chakraRotate 40s linear infinite;
     }
 
-    .reveal {
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Crisp Institutional Table & Panel Styling */
+    .inst-panel {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      box-shadow: 0 1px 2px rgba(67, 10, 4, 0.04);
     }
-    .reveal.in-view {
-      opacity: 1;
-      transform: translateY(0);
+    .inst-header-bar {
+      background: linear-gradient(90deg, #F5EDE0 0%, #FAF4EA 100%);
+      border-bottom: 1px solid var(--rule);
     }
   </style>
 </head>
-<body class="text-stone-800 antialiased selection:bg-amber-300 selection:text-red-950 overflow-x-hidden">
+<body class="antialiased selection:bg-amber-200 selection:text-red-950">
 
-  <!-- Top Sacred Mantra Ticker -->
-  <div class="bg-[#3B0A04] text-amber-300 text-[11px] sm:text-xs py-1.5 px-4 text-center font-medium tracking-wide border-b border-amber-500/20">
-    <span class="font-sanskrit">श्रीमते रामानुजाय नमः</span>
-    <span class="mx-2 text-amber-500">✦</span>
-    <span class="font-tamil">ஸ்ரீமதே வரவரமுநயே நம:</span>
-    <span class="mx-2 text-amber-500">✦</span>
-    <span class="font-sanskrit">श्री वाधूल कुलतिलकाय नमः</span>
+  <!-- 1. Top Sacred Invocation Strip (Gazette Header) -->
+  <div class="bg-[#380803] text-amber-200/95 border-b border-amber-500/30 text-[11px] py-1.5 px-4">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-3 font-medium">
+        <span class="font-sanskrit text-amber-300">श्रीमते रामानुजाय नमः</span>
+        <span class="text-amber-500/60">|</span>
+        <span class="font-tamil text-amber-200">ஸ்ரீமதே வரவரமுநயே நம:</span>
+        <span class="hidden sm:inline text-amber-500/60">|</span>
+        <span class="hidden sm:inline font-sanskrit text-amber-300">श्री वाधूल कुलतिलकाय नमः</span>
+      </div>
+      <div class="font-mono-meta text-[10px] uppercase tracking-wider text-amber-300/80" id="live-date-bar">
+        KANCHIPURAM • ARCHIVAL REGISTER
+      </div>
+    </div>
   </div>
 
-  <!-- Sticky Glass Navigation -->
-  <header class="sticky top-0 z-40 bg-gradient-to-r from-[#581107]/95 via-[#7C1B0D]/95 to-[#581107]/95 backdrop-blur-md text-amber-50 shadow-xl border-b border-amber-400/30">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-      <a href="#" class="flex items-center gap-3 group">
-        <!-- Thenkalai Thiruman Badge -->
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-500 to-orange-600 p-1.5 shadow-lg group-hover:scale-105 transition">
-          <svg viewBox="0 0 64 64" class="w-full h-full" fill="none">
-            <path d="M17 9 V35 C17 45 24 49 32 49 C40 49 47 45 47 35 V9 H41 V34 C41 40 37 43 32 43 C27 43 23 40 23 34 V9 H17 Z" fill="#FFFFFF"/>
-            <path d="M29 49 H35 V57 H29 Z" fill="#FFFFFF"/>
-            <path d="M22 55 Q32 51 42 55 L39 58.5 Q32 55 25 58.5 Z" fill="#FFFFFF"/>
-            <path d="M30.3 11 H33.7 V42 H30.3 Z" fill="#DC2626"/>
+  <!-- 2. Institutional Masthead -->
+  <header class="bg-gradient-to-b from-[#5B1007] to-[#460B04] text-amber-50 border-b-2 border-[#C5933E] sticky top-0 z-40 shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between gap-4">
+      
+      <!-- Left: Official Seal & Title -->
+      <div class="flex items-center gap-3.5">
+        <!-- High-Precision Thenkalai Thiruman + Shankha/Chakra Seal -->
+        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-[#2E0602] border border-[#C5933E]/70 p-1.5 flex items-center justify-center shrink-0 shadow-inner">
+          <svg viewBox="0 0 80 80" class="w-full h-full" fill="none">
+            <!-- Outer Temple Ring -->
+            <circle cx="40" cy="40" r="36" stroke="#C5933E" stroke-width="1" stroke-dasharray="2 2"/>
+            <!-- Left Shankha (Conch) -->
+            <path d="M14 32 C10 32 8 36 9 41 C10 45 13 48 15 49 C17 48 20 45 21 41 C22 36 20 32 16 32 Z" stroke="#FDE68A" stroke-width="1.2"/>
+            <path d="M11 38 H19 M11 42 H19" stroke="#FDE68A" stroke-width="1"/>
+            <!-- Right Sudarshana Chakra -->
+            <g class="chakra-slow" style="transform-origin: 65px 40px;">
+              <circle cx="65" cy="40" r="6" stroke="#FDE68A" stroke-width="1.2"/>
+              <path d="M65 31 V34 M65 46 V49 M56 40 H59 M71 40 H74 M59 34 L61 36 M69 44 L71 46 M71 34 L69 36 M61 44 L59 46" stroke="#FDE68A" stroke-width="1.1"/>
+            </g>
+            <!-- Central Thenkalai Thiruman (Urdhva Pundra + Padmam Base) -->
+            <path class="seal-path" d="M27 14 V44 C27 54 33 58 40 58 C47 58 53 54 53 44 V14 H47.5 V43 C47.5 49.5 44 52.5 40 52.5 C36 52.5 32.5 49.5 32.5 43 V14 H27 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="0.8"/>
+            <!-- Padmam Pedestal -->
+            <path class="seal-path" d="M37.2 58 H42.8 V66 H37.2 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="0.6"/>
+            <path class="seal-path" d="M30 64.5 Q40 60.5 50 64.5 L47 68 Q40 64.5 33 68 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="0.6"/>
+            <!-- Crimson Srichurnam -->
+            <path class="seal-path" d="M38.4 16 H41.6 V52 H38.4 Z" fill="#DC2626" stroke="#EF4444" stroke-width="0.5"/>
           </svg>
         </div>
-        <div>
-          <span class="font-heritage text-sm sm:text-base font-extrabold tracking-wide text-amber-100 block leading-tight" id="nav-title">
-            Kovil Kandhadai Appan Thirumaligai
-          </span>
-          <span class="text-[11px] text-amber-300/90 font-medium block" id="nav-sub">
-            Kanchipuram • Vadhula Gothram
-          </span>
-        </div>
-      </a>
 
-      <!-- Clean 2-Language Switcher (EN / தமிழ்) -->
-      <div class="flex items-center bg-black/35 p-1 rounded-full border border-amber-400/35 text-xs font-bold shrink-0">
-        <button onclick="setLang('en')" id="btn-en" class="px-3 py-1 rounded-full bg-gradient-to-r from-amber-300 to-amber-500 text-[#450B04] shadow transition">
-          English
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-mono-meta text-[10px] uppercase tracking-widest bg-amber-400/15 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded">
+              Ashtadiggaja Parampara
+            </span>
+            <span class="hidden md:inline font-mono-meta text-[10px] text-amber-200/75">
+              EST. 15TH CENTURY CE • KANCHIPURAM
+            </span>
+          </div>
+          <h1 class="font-heritage text-base sm:text-xl md:text-2xl font-extrabold tracking-wide text-white mt-0.5 leading-tight" id="nav-title">
+            Kovil Kandhadai Appan Thirumaligai
+          </h1>
+          <p class="text-[11px] sm:text-xs text-amber-200/90 font-medium" id="nav-sub">
+            Sri Vadhula Gothram • Mudaliandan &amp; Sri Manavala Mamunigal Lineage
+          </p>
+        </div>
+      </div>
+
+      <!-- Right: Crisp Language Toggle -->
+      <div class="flex items-center bg-[#2B0602] p-0.5 rounded border border-[#C5933E]/50 text-xs font-bold shrink-0">
+        <button onclick="setLang('en')" id="btn-en" class="px-3 py-1.5 rounded-sm bg-[#C5933E] text-[#2B0602] transition">
+          ENG
         </button>
-        <button onclick="setLang('ta')" id="btn-ta" class="px-3 py-1 rounded-full text-amber-100 hover:text-white transition font-tamil">
+        <button onclick="setLang('ta')" id="btn-ta" class="px-3 py-1.5 rounded-sm text-amber-100 hover:text-white transition font-tamil">
           தமிழ்
         </button>
       </div>
     </div>
 
-    <!-- Navigation Pills -->
-    <nav class="max-w-5xl mx-auto px-4 pb-2.5 flex gap-2 overflow-x-auto text-xs font-semibold">
-      <a href="#events-sec" id="link-events" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-amber-400 hover:text-[#450B04] text-amber-100 border border-amber-300/20 whitespace-nowrap transition">Sancharam & Events</a>
-      <a href="#thaniyan-sec" id="link-thaniyan" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-amber-400 hover:text-[#450B04] text-amber-100 border border-amber-300/20 whitespace-nowrap transition">Thaniyans</a>
-      <a href="#lineage-sec" id="link-lineage" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-amber-400 hover:text-[#450B04] text-amber-100 border border-amber-300/20 whitespace-nowrap transition">Guru Parampara</a>
-      <a href="#history-sec" id="link-history" class="hidden px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-amber-400 hover:text-[#450B04] text-amber-100 border border-amber-300/20 whitespace-nowrap transition">Vaibhavam</a>
+    <!-- Institutional Index Bar -->
+    <nav class="bg-[#340703] border-t border-amber-500/20">
+      <div class="max-w-6xl mx-auto px-4 flex items-center justify-between overflow-x-auto text-xs">
+        <div class="flex divide-x divide-amber-500/20">
+          <a href="#circulars-sec" id="link-events" class="px-4 py-2 font-semibold text-amber-100 hover:bg-amber-400/15 hover:text-amber-300 whitespace-nowrap transition">01. Sancharam &amp; Circulars</a>
+          <a href="#thaniyan-sec" id="link-thaniyan" class="px-4 py-2 font-semibold text-amber-100 hover:bg-amber-400/15 hover:text-amber-300 whitespace-nowrap transition">02. Thaniyan Compendium</a>
+          <a href="#lineage-sec" id="link-lineage" class="px-4 py-2 font-semibold text-amber-100 hover:bg-amber-400/15 hover:text-amber-300 whitespace-nowrap transition">03. Guru Parampara</a>
+          <a href="#history-sec" id="link-history" class="hidden px-4 py-2 font-semibold text-amber-100 hover:bg-amber-400/15 hover:text-amber-300 whitespace-nowrap transition">04. Sthala Vaibhavam</a>
+        </div>
+        <span class="hidden lg:inline font-mono-meta text-[11px] text-amber-300/80 pl-4">
+          THIRUNAKSHATRAM: PURATTASI MAGAM
+        </span>
+      </div>
     </nav>
   </header>
 
-  <!-- Hero Section with Animated Mandala & Thenkalai Emblem -->
-  <section class="relative overflow-hidden bg-gradient-to-b from-[#691408] via-[#B8390E] to-[#FFF8EE] text-amber-50 pt-10 pb-20 px-4">
-    <!-- Animated Sacred Geometry Background -->
-    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-      <svg viewBox="0 0 500 500" class="w-[560px] h-[560px] animate-mandala" fill="none" stroke="#FDE68A" stroke-width="1.2">
-        <circle cx="250" cy="250" r="230" stroke-dasharray="8 6"/>
-        <circle cx="250" cy="250" r="185"/>
-        <polygon points="250,25 305,195 475,250 305,305 250,475 195,305 25,250 195,195"/>
-        <polygon points="90,90 250,165 410,90 335,250 410,410 250,335 90,410 165,250"/>
-      </svg>
-      <svg viewBox="0 0 500 500" class="w-[380px] h-[380px] absolute animate-mandala-rev" fill="none" stroke="#FBBF24" stroke-width="1">
-        <circle cx="250" cy="250" r="140" stroke-dasharray="4 8"/>
-        <polygon points="250,110 370,320 130,320"/>
-        <polygon points="250,390 370,180 130,180"/>
-      </svg>
-    </div>
-
-    <div class="relative max-w-4xl mx-auto text-center space-y-5">
-      <!-- Sacred Shankha - Thenkalai Thiruman - Sudarshana Chakra Trio -->
-      <div class="flex items-center justify-center gap-7 sm:gap-10">
-        <!-- Shankha (Conch) -->
-        <div class="p-2.5 rounded-full bg-amber-950/40 border border-amber-300/30 text-amber-200 shadow-lg">
-          <svg viewBox="0 0 48 48" class="w-8 h-8 sm:w-9 sm:h-9" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M24 5 C13 5 7 15 9 26 C11 35 19 41 24 43 C29 41 37 35 39 26 C41 15 35 5 24 5 Z"/>
-            <path d="M15 17 C21 14 27 14 33 17 M13 24 C21 21 27 21 35 24 M17 31 C22 29 26 29 31 31"/>
-          </svg>
-        </div>
-
-        <!-- Central Glowing Thenkalai Thiruman & Srichurnam -->
-        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-b from-[#450A03] to-[#7C190B] border-2 border-amber-300/80 flex items-center justify-center shadow-2xl animate-thiruman">
-          <svg viewBox="0 0 64 64" class="w-11 h-11 sm:w-14 sm:h-14" fill="none">
-            <path d="M16 8 V35 C16 46 24 50 32 50 C40 50 48 46 48 35 V8 H41.5 V34 C41.5 41 37 44 32 44 C27 44 22.5 41 22.5 34 V8 H16 Z" fill="#FFFFFF"/>
-            <path d="M28.8 50 H35.2 V58.5 H28.8 Z" fill="#FFFFFF"/>
-            <path d="M21 56.5 Q32 52 43 56.5 L39.5 60.5 Q32 56.5 24.5 60.5 Z" fill="#FFFFFF"/>
-            <path d="M30.2 10 H33.8 V43 H30.2 Z" fill="#EF4444"/>
-          </svg>
-        </div>
-
-        <!-- Sudarshana Chakra -->
-        <div class="p-2.5 rounded-full bg-amber-950/40 border border-amber-300/30 text-amber-200 shadow-lg">
-          <svg viewBox="0 0 48 48" class="w-8 h-8 sm:w-9 sm:h-9" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="24" cy="24" r="14"/>
-            <circle cx="24" cy="24" r="5"/>
-            <path d="M24 3 V10 M24 38 V45 M3 24 H10 M38 24 H45 M9 9 L14 14 M34 34 L39 39 M39 9 L34 14 M14 34 L9 39"/>
-          </svg>
-        </div>
+  <!-- 3. Dense Institutional Metadata Strip -->
+  <section class="bg-[#F3E9D8] border-b border-[#DDD0BE]">
+    <div class="max-w-6xl mx-auto px-4 py-2.5 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+      <div class="border-l-2 border-[#6E1409] pl-2.5">
+        <span class="font-mono-meta text-[10px] uppercase text-stone-500 block">Acharya Seat</span>
+        <span class="font-bold text-stone-900">Appan Swamy Thirumaligai, Kanchi</span>
       </div>
-
-      <!-- Sanskrit Sloka -->
-      <p class="font-sanskrit text-sm sm:text-base text-amber-200 font-bold tracking-wide drop-shadow" id="hero-sloka">
-        “वरदगुरु चरणं वरवरमुनिवर्य घनकृपा पात्रम्”
-      </p>
-
-      <h1 class="font-display text-2xl sm:text-4xl md:text-5xl font-black text-white drop-shadow-md leading-tight" id="hero-title">
-        Kovil Kandhadai Appan Thirumaligai
-      </h1>
-
-      <p class="text-xs sm:text-base text-amber-50/95 max-w-2xl mx-auto leading-relaxed font-medium" id="hero-desc">
-        Sacred Acharya Parampara descending from Mudaliandan (Yatiraja Paduka) and Sri Manavala Mamunigal — uniting our Thirumaligai announcements, Thaniyans, and lineage heritage.
-      </p>
-
-      <!-- Heritage Badges -->
-      <div class="pt-2 flex flex-wrap justify-center gap-2.5 text-xs font-bold">
-        <span class="bg-[#450B04]/80 backdrop-blur border border-amber-300/50 px-4 py-1.5 rounded-full text-amber-200 shadow" id="badge-1">
-          🪷 Ashtadiggaja Parampara
-        </span>
-        <span class="bg-[#450B04]/80 backdrop-blur border border-amber-300/50 px-4 py-1.5 rounded-full text-amber-200 shadow" id="badge-2">
-          ⭐ Thirunakshatram: Purattasi Magam
-        </span>
-        <span class="bg-[#450B04]/80 backdrop-blur border border-amber-300/50 px-4 py-1.5 rounded-full text-amber-200 shadow" id="badge-3">
-          🛕 Kanchipuram
-        </span>
+      <div class="border-l-2 border-[#B9380C] pl-2.5">
+        <span class="font-mono-meta text-[10px] uppercase text-stone-500 block">Ancestral Root</span>
+        <span class="font-bold text-stone-900">Mudaliandan (Vadhula Gothram)</span>
+      </div>
+      <div class="border-l-2 border-[#C5933E] pl-2.5">
+        <span class="font-mono-meta text-[10px] uppercase text-stone-500 block">Sampradaya</span>
+        <span class="font-bold text-stone-900">Sri Manavala Mamunigal</span>
+      </div>
+      <div class="border-l-2 border-emerald-700 pl-2.5">
+        <span class="font-mono-meta text-[10px] uppercase text-stone-500 block">Avathara Nakshatram</span>
+        <span class="font-bold text-stone-900">Purattasi (Kanni) • Magam</span>
       </div>
     </div>
   </section>
 
-  <!-- Main Content -->
-  <main class="max-w-5xl mx-auto px-4 -mt-8 space-y-16 pb-24">
+  <!-- 4. Main High-Density Two-Column Archival Grid -->
+  <main class="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-    <!-- Featured Sanskrit & Tamil Sacred Verse Spotlight -->
-    <section class="reveal bg-gradient-to-r from-[#581107] via-[#8A220E] to-[#581107] text-amber-50 rounded-3xl p-6 sm:p-8 shadow-xl border border-amber-400/40 relative overflow-hidden">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div class="space-y-2">
-          <span class="inline-block text-[11px] uppercase tracking-widest bg-amber-400/20 text-amber-300 px-3 py-1 rounded-full font-bold border border-amber-300/30" id="verse-tag">
-            ✦ Daily Sacred Sloka & Pasuram
-          </span>
-          <p class="font-sanskrit text-base sm:text-lg font-bold text-amber-200 leading-relaxed" id="daily-sanskrit"></p>
-          <p class="font-tamil text-sm sm:text-base text-white/95 leading-relaxed" id="daily-tamil"></p>
-          <p class="text-xs text-amber-200/80 italic pt-1" id="daily-meaning"></p>
-        </div>
-        <button onclick="nextVerse()" class="self-start sm:self-center shrink-0 bg-amber-400 hover:bg-amber-300 text-[#450B04] font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition active:scale-95" id="next-verse-btn">
-          Next Sloka ↻
-        </button>
-      </div>
-    </section>
+    <!-- LEFT PRIMARY COLUMN (8 cols): Circulars + Thaniyan Compendium -->
+    <div class="lg:col-span-8 space-y-6">
 
-    <!-- Section 1: Sancharam & Announcements -->
-    <section id="events-sec" class="scroll-mt-32 reveal">
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-3">
-          <span class="w-2 h-8 rounded-full bg-gradient-to-b from-red-700 via-orange-600 to-amber-500"></span>
-          <div>
-            <h2 class="font-heritage text-xl sm:text-2xl font-extrabold text-[#4A0E06]" id="sec-events-title">
-              Sancharam & Announcements
+      <!-- Panel A: Sancharam & Official Circulars -->
+      <section id="circulars-sec" class="inst-panel rounded-md overflow-hidden scroll-mt-28">
+        <div class="inst-header-bar px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <span class="font-mono-meta text-xs font-bold bg-[#6E1409] text-amber-100 px-2 py-0.5 rounded-sm">01</span>
+            <h2 class="font-heritage text-sm sm:text-base font-extrabold text-[#430A04] tracking-wide" id="sec-events-title">
+              Sancharam, Utsavams &amp; Circulars
             </h2>
-            <p class="text-xs text-orange-800/80 font-medium" id="sec-events-sub">Upcoming Utsavams, Thirunakshatrams & Schedules</p>
           </div>
+          <span class="font-mono-meta text-[11px] font-semibold text-stone-600" id="event-count">0 RECORDS</span>
         </div>
-        <span class="text-xs font-extrabold text-orange-900 bg-amber-200/80 border border-amber-300 px-3 py-1 rounded-full" id="event-count"></span>
-      </div>
 
-      <div id="events-list" class="grid gap-6 sm:grid-cols-2"></div>
-    </section>
+        <div id="events-list" class="divide-y divide-[#E8DEC9]"></div>
+      </section>
 
-    <!-- Sacred Divider -->
-    <div class="flex items-center justify-center gap-4 text-orange-600/70">
-      <span class="h-px w-24 bg-gradient-to-r from-transparent via-amber-500 to-orange-500"></span>
-      <span class="text-base">🪷 ॐ 🪷</span>
-      <span class="h-px w-24 bg-gradient-to-l from-transparent via-amber-500 to-orange-500"></span>
+      <!-- Panel B: Thaniyan & Stotra Compendium -->
+      <section id="thaniyan-sec" class="inst-panel rounded-md overflow-hidden scroll-mt-28">
+        <div class="inst-header-bar px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <span class="font-mono-meta text-xs font-bold bg-[#6E1409] text-amber-100 px-2 py-0.5 rounded-sm">02</span>
+            <h2 class="font-heritage text-sm sm:text-base font-extrabold text-[#430A04] tracking-wide" id="sec-thaniyan-title">
+              Anusandhanam &amp; Acharya Thaniyans
+            </h2>
+          </div>
+          <span class="font-mono-meta text-[10px] uppercase text-stone-500">Sanskrit • Tamil • IAST</span>
+        </div>
+
+        <div id="thaniyans-list" class="divide-y divide-[#E8DEC9]"></div>
+      </section>
+
+      <!-- Panel C: History (Auto-shows when added in Admin) -->
+      <section id="history-sec" class="hidden inst-panel rounded-md overflow-hidden scroll-mt-28">
+        <div class="inst-header-bar px-4 py-3 flex items-center gap-2.5">
+          <span class="font-mono-meta text-xs font-bold bg-[#6E1409] text-amber-100 px-2 py-0.5 rounded-sm">04</span>
+          <h2 class="font-heritage text-sm sm:text-base font-extrabold text-[#430A04] tracking-wide" id="sec-history-title">
+            Thirumaligai Vaibhavam &amp; Archival Notes
+          </h2>
+        </div>
+        <div id="history-body" class="p-5 font-editorial text-base leading-relaxed text-stone-800 whitespace-pre-line"></div>
+      </section>
+
     </div>
 
-    <!-- Section 2: Thaniyans & Stotras -->
-    <section id="thaniyan-sec" class="scroll-mt-32 reveal">
-      <div class="flex items-center gap-3 mb-6">
-        <span class="w-2 h-8 rounded-full bg-gradient-to-b from-red-700 via-orange-600 to-amber-500"></span>
-        <div>
-          <h2 class="font-heritage text-xl sm:text-2xl font-extrabold text-[#4A0E06]" id="sec-thaniyan-title">
-            Thaniyans & Stotras
-          </h2>
-          <p class="text-xs text-orange-800/80 font-medium" id="sec-thaniyan-sub">Sacred Acharya Invocations for Daily Anusandhanam</p>
+    <!-- RIGHT SIDEBAR COLUMN (4 cols): Sacred Sloka Reader + Guru Parampara Register -->
+    <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-28">
+
+      <!-- Sidebar Widget 1: Sanskrit & Tamil Sloka Reader -->
+      <div class="bg-[#460B04] text-amber-50 rounded-md border border-[#C5933E]/60 shadow-sm overflow-hidden">
+        <div class="bg-[#2E0602] px-4 py-2.5 border-b border-[#C5933E]/30 flex items-center justify-between">
+          <span class="font-mono-meta text-[11px] uppercase tracking-wider text-amber-300 font-semibold" id="verse-tag">
+            Nithya Anusandhanam Sloka
+          </span>
+          <button onclick="nextVerse()" class="font-mono-meta text-[11px] bg-amber-400/20 hover:bg-amber-400 hover:text-[#2E0602] text-amber-200 px-2.5 py-0.5 rounded-sm border border-amber-400/40 transition" id="next-verse-btn">
+            NEXT ↻
+          </button>
+        </div>
+        <div class="p-4 space-y-2.5">
+          <p class="font-sanskrit text-sm sm:text-base text-amber-200 font-semibold leading-relaxed" id="daily-sanskrit"></p>
+          <p class="font-tamil text-xs sm:text-sm text-white/95 leading-relaxed border-t border-amber-500/20 pt-2" id="daily-tamil"></p>
+          <p class="text-xs text-amber-200/80 italic leading-snug pt-1" id="daily-meaning"></p>
         </div>
       </div>
 
-      <div id="thaniyans-list" class="space-y-5"></div>
-    </section>
-
-    <!-- Sacred Divider -->
-    <div class="flex items-center justify-center gap-4 text-orange-600/70">
-      <span class="h-px w-24 bg-gradient-to-r from-transparent via-amber-500 to-orange-500"></span>
-      <span class="text-base">🪷 ॐ 🪷</span>
-      <span class="h-px w-24 bg-gradient-to-l from-transparent via-amber-500 to-orange-500"></span>
-    </div>
-
-    <!-- Section 3: Interactive Guru Parampara Lineage -->
-    <section id="lineage-sec" class="scroll-mt-32 reveal">
-      <div class="flex items-center gap-3 mb-6">
-        <span class="w-2 h-8 rounded-full bg-gradient-to-b from-red-700 via-orange-600 to-amber-500"></span>
-        <div>
-          <h2 class="font-heritage text-xl sm:text-2xl font-extrabold text-[#4A0E06]" id="sec-lineage-title">
-            Guru Parampara Lineage
-          </h2>
-          <p class="text-xs text-orange-800/80 font-medium" id="sec-lineage-sub">Tap any Acharya card to expand lineage details</p>
+      <!-- Sidebar Widget 2: Guru Parampara Register -->
+      <section id="lineage-sec" class="inst-panel rounded-md overflow-hidden scroll-mt-28">
+        <div class="inst-header-bar px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="font-mono-meta text-xs font-bold bg-[#6E1409] text-amber-100 px-2 py-0.5 rounded-sm">03</span>
+            <h2 class="font-heritage text-sm font-extrabold text-[#430A04] tracking-wide" id="sec-lineage-title">
+              Guru Parampara Register
+            </h2>
+          </div>
+          <span class="font-mono-meta text-[10px] text-stone-500" id="lineage-count"></span>
         </div>
-      </div>
 
-      <div id="lineage-list" class="relative border-l-2 border-orange-500 ml-4 pl-6 space-y-5"></div>
-    </section>
+        <div id="lineage-list" class="divide-y divide-[#E8DEC9]"></div>
+      </section>
 
-    <!-- Section 4: History (Auto-reveals once added in Admin) -->
-    <section id="history-sec" class="hidden scroll-mt-32 reveal">
-      <div class="flex items-center gap-3 mb-6">
-        <span class="w-2 h-8 rounded-full bg-gradient-to-b from-red-700 via-orange-600 to-amber-500"></span>
-        <h2 class="font-heritage text-xl sm:text-2xl font-extrabold text-[#4A0E06]" id="sec-history-title">
-          Thirumaligai Vaibhavam & History
-        </h2>
-      </div>
-      <div id="history-body" class="bg-white p-6 sm:p-8 rounded-3xl shadow-md border-t-4 border-orange-600 text-sm sm:text-base leading-relaxed text-stone-700 whitespace-pre-line"></div>
-    </section>
+    </aside>
 
   </main>
 
-  <!-- Sacred Footer -->
-  <footer class="bg-gradient-to-r from-[#3B0A04] via-[#631408] to-[#3B0A04] text-amber-100 text-center py-10 px-4 border-t-2 border-amber-500/40">
-    <div class="max-w-3xl mx-auto space-y-2">
-      <p class="font-sanskrit text-sm sm:text-base text-amber-300 font-bold">
-        सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज । अहं त्वा सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः ॥
-      </p>
-      <p class="font-tamil text-sm text-amber-200 font-semibold">
-        ஆழ்வார் எம்பெருமானார் ஜீயர் திருவடிகளே சரணம்
-      </p>
-      <p class="text-xs text-amber-200/70 pt-2">
-        Kovil Kandhadai Appan Thirumaligai • Kanchipuram
-      </p>
+  <!-- 5. Institutional Footer -->
+  <footer class="bg-[#2E0602] text-amber-100/90 border-t-2 border-[#C5933E] mt-12">
+    <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+      <div class="space-y-1 text-center sm:text-left">
+        <p class="font-sanskrit text-sm text-amber-300 font-semibold">
+          वरदगुरु चरणं वरवरमुनिवर्य घनकृपा पात्रम् । प्रवरगुण रत्न जलधिं प्रणमामि श्रीनिवास गुरुवर्यम् ॥
+        </p>
+        <p class="font-tamil text-amber-200">
+          ஆழ்வார் எம்பெருமானார் ஜீயர் திருவடிகளே சரணம்
+        </p>
+      </div>
+      <div class="font-mono-meta text-[11px] text-amber-200/70 text-center sm:text-right">
+        <p>KOVIL KANDHADAI APPAN THIRUMALIGAI</p>
+        <p>KANCHIPURAM • TAMIL NADU</p>
+      </div>
     </div>
   </footer>
 
@@ -302,83 +285,101 @@
   <script>
     let lang = 'en';
     let verseIdx = 0;
-    let cache = { events: [], thaniyans: [], lineage: [], content: [] };
+
+    // Built-in verified baseline data so the portal is immediately dense & functional even before DB sync
+    const DEFAULT_THANIYANS = [
+      {
+        title: 'Kovil Kandhadai Appan Thaniyan',
+        sanskrit_text: 'वरदगुरु चरणं वरवरमुनिवर्य घनकृपा पात्रम् ।\nप्रवरगुण रत्न जलधिं प्रणमामि श्रीनिवास गुरुवर्यम् ॥',
+        tamil_text: 'வரதகுரு சரணம் வரவரமுநிவர்ய கநக்ருபா பாத்ரம் |\nப்ரவரகுண ரத்ந ஜலதிம் ப்ரணமாமி ஸ்ரீநிவாஸ குருவர்யம் ||',
+        english_iast: 'Varadhaguru charaṇaṁ varavaramunivarya ghanakṛpā pātram |\nPravaraguṇa ratna jaladhiṁ praṇamāmi śrīnivāsa guruvaryam ||',
+        meaning: 'I prostrate before Sri Srinivasa Guru (Kovil Kandhadai Appan), who takes refuge at the feet of Varadaguru, is the recipient of Sri Manavala Mamunigal’s abundant grace, and is an ocean of noble virtues.'
+      },
+      {
+        title: 'Sri Manavala Mamunigal Thaniyan',
+        sanskrit_text: 'श्रीशैलॆश दयापात्रं धीभक्त्यादि गुणार्णवम् ।\nयतीन्द्र प्रवणं वन्दे रम्यजामातरं मुनिम् ॥',
+        tamil_text: 'ஸ்ரீசைலேச தயாபாத்ரம் தீபக்த்யாதி குணார்ணவம் |\nயதீந்த்ர ப்ரவணம் வந்தே ரம்யஜாமாதரம் முநிம் ||',
+        english_iast: 'Śrīśaileśa dayāpātraṁ dhībhaktyādi guṇārṇavam |\nYatīndra pravaṇaṁ vande ramyajāmātaraṁ munim ||',
+        meaning: 'I salute Sri Manavala Mamunigal, the ocean of knowledge and devotion, blessed by Thiruvaymozhi Pillai and deeply devoted to Bhagavad Ramanuja.'
+      },
+      {
+        title: 'Mudaliandan (Yatiraja Paduka) Thaniyan',
+        sanskrit_text: 'पादुके यतिराजस्य कथयन्ति यदाख्यया ।\nतस्य दाशरथेः पादौ शिरसा धारयाम्यहम् ॥',
+        tamil_text: 'பாதுகே யதிராஜஸ்ய கதயந்தி யதாக்யயா |\nதஸ்ய தாசரதே: பாதௌ சிரஸா தாரயாம்யஹம் ||',
+        english_iast: 'Pāduke yatirājasya kathayanti yadākhyayā |\nTasya dāśaratheḥ pādau śirasā dhārayāmyaham ||',
+        meaning: 'I bear on my head the sacred feet of Mudaliandan (Dasarathi), whose very name signifies the sacred Padukas of Sri Ramanuja.'
+      }
+    ];
+
+    const DEFAULT_LINEAGE = [
+      { id: '1', name_en: 'Sri Bhagavad Ramanuja', name_ta: 'ஸ்ரீ பகவத் ராமாநுஜர்', era_or_star: '1017–1137 CE • Chithirai Thiruvadirai', bio_en: 'Foundational Acharya of Vishishtadvaita Sri Vaishnavism.' },
+      { id: '2', name_en: 'Mudaliandan (Dasarathi)', name_ta: 'முதலியாண்டான் (தாசரதி)', era_or_star: 'Chithirai Punarpoosam • Vadhula Gothram', bio_en: 'Nephew and primary disciple of Sri Ramanuja, revered as Yatiraja Paduka; ancestral progenitor of the Kandhadai lineage.' },
+      { id: '3', name_en: 'Kovil Kandhadai Andan', name_ta: 'கோவில் கந்தாடை ஆண்டான்', era_or_star: '12th Century CE • Srirangam', bio_en: 'Son of Mudaliandan, entrusted by Ramanuja with Srirangam temple administration ("Kovil").' },
+      { id: '4', name_en: 'Kovil Kandhadai Annan', name_ta: 'கோவில் கந்தாடை அண்ணன்', era_or_star: 'Purattasi Pooradam', bio_en: 'Elder brother of Appan Swamy and foremost among the Ashtadiggajas of Sri Manavala Mamunigal.' },
+      { id: '5', name_en: 'Kovil Kandhadai Appan', name_ta: 'கோவில் கந்தாடை அப்பன்', era_or_star: 'Purattasi Magam • Kanchipuram', bio_en: 'Cherished disciple of Sri Manavala Mamunigal, author of Varavaramuni Vaibhava Vijayam, and founder of the Kanchipuram Appan Swamy Thirumaligai.' }
+    ];
+
+    let cache = { events: [], thaniyans: DEFAULT_THANIYANS, lineage: DEFAULT_LINEAGE, content: [] };
 
     const SACRED_VERSES = [
       {
+        sanskrit: 'वरदगुरु चरणं वरवरमुनिवर्य घनकृपा पात्रम् । प्रवरगुण रत्न जलधिं प्रणमामि श्रीनिवास गुरुवर्यम् ॥',
+        tamil: 'வரதகுரு சரணம் வரவரமுநிவர்ய கநக்ருபா பாத்ரம் | ப்ரவரகுண ரத்ந ஜலதிம் ப்ரணமாமி ஸ்ரீநிவாஸ குருவர்யம் ||',
+        meaning_en: 'Invocation to Sri Kovil Kandhadai Appan (Srinivasa Guru), recipient of Sri Manavala Mamunigal’s grace.',
+        meaning_ta: 'ஸ்ரீ மணவாள மாமுனிகளின் கிருபைக்குப் பாத்திரமான கோவில் கந்தாடை அப்பன் தனியன்.'
+      },
+      {
         sanskrit: 'श्रीशैलॆश दयापात्रं धीभक्त्यादि गुणार्णवम् । यतीन्द्र प्रवणं वन्दे रम्यजामातरं मुनिम् ॥',
         tamil: 'ஸ்ரீசைலேச தயாபாத்ரம் தீபக்த்யாதி குணார்ணவம் | யதீந்த்ர ப்ரவணம் வந்தே ரம்யஜாமாதரம் முநிம் ||',
-        meaning_en: 'Salutation to Sri Manavala Mamunigal, ocean of wisdom and devotion, who is devoted to Bhagavad Ramanuja.',
-        meaning_ta: 'ஞானம், பக்தி முதலிய குணக்கடலானவரும் எம்பெருமானாரிடம் ஈடுபட்டவருமான ஸ்ரீ மணவாள மாமுனிகளை வணங்குகிறேன்.'
+        meaning_en: 'Invocation to Sri Manavala Mamunigal, Acharya of the Ashtadiggajas.',
+        meaning_ta: 'அஷ்டதிக்கஜங்களின் ஆசார்யரான ஸ்ரீ மணவாள மாமுனிகள் தனியன்.'
       },
       {
         sanskrit: 'पादुके यतिराजस्य कथयन्ति यदाख्यया । तस्य दाशरथेः पादौ शिरसा धारयाम्यहम् ॥',
         tamil: 'பாதுகே யதிராஜஸ்ய கதயந்தி யதாக்யயா | தஸ்ய தாசரதே: பாதௌ சிரஸா தாரயாம்யஹம் ||',
-        meaning_en: 'I bear upon my head the sacred feet of Mudaliandan (Dasarathi), celebrated as the very Padukas of Yatiraja Ramanuja.',
-        meaning_ta: 'எம்பெருமானாரின் திருவடி நிலைகளாகப் போற்றப்படும் முதலியாண்டானின் திருவடிகளை என் சிரசில் தாங்குகிறேன்.'
-      },
-      {
-        sanskrit: 'वरदगुरु चरणं वरवरमुनिवर्य घनकृपा पात्रम् । प्रवरगुण रत्न जलधिं प्रणमामि श्रीनिवास गुरुवर्यम् ॥',
-        tamil: 'வரதகுரு சரணம் வரவரமுநிவர்ய கநக்ருபா பாத்ரம் | ப்ரவரகுண ரத்ந ஜலதிம் ப்ரணமாமி ஸ்ரீநிவாஸ குருவர்யம் ||',
-        meaning_en: 'I bow to Sri Kovil Kandhadai Appan (Srinivasa Guru), recipient of Manavala Mamunigal’s abundant grace and an ocean of noble virtues.',
-        meaning_ta: 'மணவாள மாமுனிகளின் பரிபூரண கிருபைக்குப் பாத்திரமானவரும் நற்குணக் கடலுமான கோவில் கந்தாடை அப்பன் திருவடிகளை வணங்குகிறேன்.'
+        meaning_en: 'Invocation to Mudaliandan (Yatiraja Paduka), Vadhula Gothra progenitor.',
+        meaning_ta: 'வாதூல கோத்ர முதல்வரான முதலியாண்டான் தனியன்.'
       }
     ];
 
     const UI_TEXT = {
       en: {
         navTitle: 'Kovil Kandhadai Appan Thirumaligai',
-        navSub: 'Kanchipuram • Vadhula Gothram',
-        heroTitle: 'Kovil Kandhadai Appan Thirumaligai',
-        heroDesc: 'Sacred Acharya Parampara descending from Mudaliandan (Yatiraja Paduka) and Sri Manavala Mamunigal — uniting our Thirumaligai announcements, Thaniyans, and lineage heritage.',
-        badge1: '🪷 Ashtadiggaja Parampara',
-        badge2: '⭐ Thirunakshatram: Purattasi Magam',
-        badge3: '🛕 Kanchipuram',
-        linkEvents: 'Sancharam & Events',
-        linkThaniyan: 'Thaniyans',
-        linkLineage: 'Guru Parampara',
-        linkHistory: 'Vaibhavam',
-        verseTag: '✦ Sacred Sanskrit & Tamil Sloka',
-        nextVerse: 'Next Sloka ↻',
-        secEvents: 'Sancharam & Announcements',
-        secEventsSub: 'Upcoming Utsavams, Thirunakshatrams & Schedules',
-        secThaniyan: 'Thaniyans & Stotras',
-        secThaniyanSub: 'Sacred Acharya Invocations for Daily Anusandhanam',
-        secLineage: 'Guru Parampara Lineage',
-        secLineageSub: 'Tap any Acharya card to expand lineage details',
-        secHistory: 'Thirumaligai Vaibhavam & History',
-        noEvents: 'No upcoming sancharam or utsavams posted yet.',
-        copy: 'Copy',
-        copied: 'Copied!',
-        share: 'Share on WhatsApp ↗'
+        navSub: 'Sri Vadhula Gothram • Mudaliandan & Sri Manavala Mamunigal Lineage',
+        linkEvents: '01. Sancharam & Circulars',
+        linkThaniyan: '02. Thaniyan Compendium',
+        linkLineage: '03. Guru Parampara',
+        linkHistory: '04. Sthala Vaibhavam',
+        secEvents: 'Sancharam, Utsavams & Circulars',
+        secThaniyan: 'Anusandhanam & Acharya Thaniyans',
+        secLineage: 'Guru Parampara Register',
+        secHistory: 'Thirumaligai Vaibhavam & Archival Notes',
+        noEvents: 'No active sancharam circulars posted in the register yet.',
+        copy: 'COPY',
+        copied: 'COPIED',
+        share: 'SHARE ↗'
       },
       ta: {
         navTitle: 'கோவில் கந்தாடை அப்பன் திருமாளிகை',
-        navSub: 'காஞ்சிபுரம் • வாதூல கோத்ரம்',
-        heroTitle: 'கோவில் கந்தாடை அப்பன் திருமாளிகை',
-        heroDesc: 'முதலியாண்டான் (யதிராஜ பாதுகா) மற்றும் ஸ்ரீ மணவாள மாமுனிகள் திருவடி சம்பந்தம் பெற்ற ஆசார்ய பரம்பரை, தனியன்கள் மற்றும் சஞ்சார விவரங்கள்.',
-        badge1: '🪷 அஷ்டதிக்கஜ பரம்பரை',
-        badge2: '⭐ திருநட்சத்திரம்: புரட்டாசி மகம்',
-        badge3: '🛕 காஞ்சிபுரம்',
-        linkEvents: 'சஞ்சாரம் & அறிவிப்புகள்',
-        linkThaniyan: 'தனியன்கள்',
-        linkLineage: 'குரு பரம்பரை',
-        linkHistory: 'வைபவம்',
-        verseTag: '✦ புனித ஸ்லோகம் & பாசுரம்',
-        nextVerse: 'அடுத்த ஸ்லோகம் ↻',
-        secEvents: 'சஞ்சாரம் & முக்கிய அறிவிப்புகள்',
-        secEventsSub: 'உற்சவங்கள், திருநட்சத்திரங்கள் மற்றும் சஞ்சார விவரங்கள்',
-        secThaniyan: 'தனியன்கள் & ஸ்தோத்திரங்கள்',
-        secThaniyanSub: 'நித்ய அனுசந்தானத்திற்கான ஆசார்ய தனியன்கள்',
-        secLineage: 'குரு பரம்பரை',
-        secLineageSub: 'விவரங்களை அறிய ஆசார்யர் பெயரைத் தொடவும்',
-        secHistory: 'திருமாளிகை வைபவம் & வரலாறு',
-        noEvents: 'தற்போது புதிய அறிவிப்புகள் ஏதுமில்லை.',
+        navSub: 'ஸ்ரீ வாதூல கோத்ரம் • முதலியாண்டான் & மணவாள மாமுனிகள் பரம்பரை',
+        linkEvents: '01. சஞ்சாரம் & அறிவிப்புகள்',
+        linkThaniyan: '02. தனியன் தொகுப்பு',
+        linkLineage: '03. குரு பரம்பரை',
+        linkHistory: '04. ஸ்தல வைபவம்',
+        secEvents: 'சஞ்சாரம், உற்சவங்கள் & அறிவிப்புகள்',
+        secThaniyan: 'நித்ய அனுசந்தானம் & ஆசார்ய தனியன்கள்',
+        secLineage: 'குரு பரம்பரை அட்டவணை',
+        secHistory: 'திருமாளிகை வைபவம் & வரலாற்றுக் குறிப்புகள்',
+        noEvents: 'தற்போது புதிய சஞ்சார அறிவிப்புகள் எதுவும் பதிவிடப்படவில்லை.',
         copy: 'நகலெடு',
-        copied: 'நகலெடுக்கப்பட்டது!',
-        share: 'வாட்ஸ்அப்பில் பகிர் ↗'
+        copied: 'நகலெடுக்கப்பட்டது',
+        share: 'பகிர் ↗'
       }
     };
+
+    document.getElementById('live-date-bar').textContent = new Date().toLocaleDateString('en-IN', {
+      weekday: 'short', day: '2-digit', month: 'short', year: 'numeric'
+    }).toUpperCase() + ' • KANCHIPURAM';
 
     function renderVerse() {
       const v = SACRED_VERSES[verseIdx];
@@ -395,32 +396,22 @@
     function setLang(newLang) {
       lang = newLang;
       document.getElementById('btn-en').className = lang === 'en'
-        ? 'px-3 py-1 rounded-full bg-gradient-to-r from-amber-300 to-amber-500 text-[#450B04] shadow transition'
-        : 'px-3 py-1 rounded-full text-amber-100 hover:text-white transition';
+        ? 'px-3 py-1.5 rounded-sm bg-[#C5933E] text-[#2B0602] transition'
+        : 'px-3 py-1.5 rounded-sm text-amber-100 hover:text-white transition';
       document.getElementById('btn-ta').className = lang === 'ta'
-        ? 'px-3 py-1 rounded-full bg-gradient-to-r from-amber-300 to-amber-500 text-[#450B04] shadow transition font-tamil'
-        : 'px-3 py-1 rounded-full text-amber-100 hover:text-white transition font-tamil';
+        ? 'px-3 py-1.5 rounded-sm bg-[#C5933E] text-[#2B0602] transition font-tamil'
+        : 'px-3 py-1.5 rounded-sm text-amber-100 hover:text-white transition font-tamil';
 
       const t = UI_TEXT[lang];
       document.getElementById('nav-title').textContent = t.navTitle;
       document.getElementById('nav-sub').textContent = t.navSub;
-      document.getElementById('hero-title').textContent = t.heroTitle;
-      document.getElementById('hero-desc').textContent = t.heroDesc;
-      document.getElementById('badge-1').textContent = t.badge1;
-      document.getElementById('badge-2').textContent = t.badge2;
-      document.getElementById('badge-3').textContent = t.badge3;
       document.getElementById('link-events').textContent = t.linkEvents;
       document.getElementById('link-thaniyan').textContent = t.linkThaniyan;
       document.getElementById('link-lineage').textContent = t.linkLineage;
       document.getElementById('link-history').textContent = t.linkHistory;
-      document.getElementById('verse-tag').textContent = t.verseTag;
-      document.getElementById('next-verse-btn').textContent = t.nextVerse;
       document.getElementById('sec-events-title').textContent = t.secEvents;
-      document.getElementById('sec-events-sub').textContent = t.secEventsSub;
       document.getElementById('sec-thaniyan-title').textContent = t.secThaniyan;
-      document.getElementById('sec-thaniyan-sub').textContent = t.secThaniyanSub;
       document.getElementById('sec-lineage-title').textContent = t.secLineage;
-      document.getElementById('sec-lineage-sub').textContent = t.secLineageSub;
       document.getElementById('sec-history-title').textContent = t.secHistory;
 
       renderVerse();
@@ -431,7 +422,7 @@
       navigator.clipboard.writeText(text);
       const t = UI_TEXT[lang];
       btn.textContent = t.copied;
-      setTimeout(() => btn.textContent = t.copy, 1500);
+      setTimeout(() => btn.textContent = t.copy, 1400);
     }
 
     function shareWhatsApp(title, meta) {
@@ -439,86 +430,83 @@
       window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    function toggleNode(id) {
-      const el = document.getElementById('bio-' + id);
+    function toggleNode(idx) {
+      const el = document.getElementById('bio-' + idx);
       if (el) el.classList.toggle('hidden');
     }
 
     function renderAll() {
       const t = UI_TEXT[lang];
 
-      // 1. Events
+      // 1. Events / Circulars Register
       const evBox = document.getElementById('events-list');
-      document.getElementById('event-count').textContent = cache.events.length ? `${cache.events.length}` : '';
+      document.getElementById('event-count').textContent = `${cache.events.length} RECORDS`;
       if (!cache.events.length) {
-        evBox.innerHTML = `
-          <div class="bg-white/90 p-7 rounded-3xl border border-amber-200 shadow-sm text-center col-span-full">
-            <p class="text-sm font-semibold text-stone-700">${t.noEvents}</p>
-          </div>`;
+        evBox.innerHTML = `<div class="p-6 text-center text-xs font-medium text-stone-500">${t.noEvents}</div>`;
       } else {
-        evBox.innerHTML = cache.events.map(e => {
+        evBox.innerHTML = cache.events.map((e, i) => {
           const title = (lang === 'ta' && e.title_ta) ? e.title_ta : e.title_en;
           const desc = (lang === 'ta' && e.description_ta) ? e.description_ta : (e.description_en || '');
           return `
-          <article class="card-lift bg-white rounded-3xl shadow-sm border-t-4 ${e.is_pinned ? 'border-red-600 col-span-full' : 'border-amber-500'} overflow-hidden flex flex-col justify-between">
-            <div>
-              ${e.poster_url ? `<img src="${e.poster_url}" alt="Patrika" loading="lazy" class="w-full max-h-80 object-contain bg-amber-50 border-b border-amber-100" />` : ''}
-              <div class="p-5 sm:p-6">
-                <div class="flex items-start justify-between gap-2">
-                  <h3 class="font-bold text-[#4A0E06] text-base sm:text-lg leading-snug">${title}</h3>
-                  ${e.is_pinned ? '<span class="shrink-0 text-[10px] uppercase tracking-wider bg-red-100 text-red-900 px-3 py-1 rounded-full font-extrabold">★ Featured</span>' : ''}
-                </div>
-                <div class="flex flex-wrap gap-2 text-xs text-orange-950 font-semibold mt-3">
-                  ${e.event_date ? `<span class="bg-amber-100/80 px-3 py-1 rounded-lg border border-amber-300/70">📅 ${e.event_date}</span>` : ''}
-                  ${e.location ? `<span class="bg-amber-100/80 px-3 py-1 rounded-lg border border-amber-300/70">📍 ${e.location}</span>` : ''}
-                </div>
-                <p class="text-sm text-stone-700 mt-3.5 whitespace-pre-line leading-relaxed">${desc}</p>
+          <article class="p-4 sm:p-5 hover:bg-[#FCF9F2] transition ${e.is_pinned ? 'bg-amber-50/60 border-l-4 border-l-[#B9380C]' : ''}">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+              <div class="flex items-center gap-2 font-mono-meta text-[11px]">
+                <span class="text-stone-400">#${String(i + 1).padStart(2, '0')}</span>
+                ${e.event_date ? `<span class="bg-[#F3E9D8] text-[#430A04] font-semibold px-2 py-0.5 rounded-sm border border-[#DDD0BE]">${e.event_date}</span>` : ''}
+                ${e.location ? `<span class="text-[#B9380C] font-semibold uppercase">• ${e.location}</span>` : ''}
+                ${e.is_pinned ? `<span class="bg-[#6E1409] text-amber-200 px-2 py-0.5 rounded-sm font-bold">PINNED</span>` : ''}
               </div>
-            </div>
-            <div class="px-6 py-3 bg-gradient-to-r from-amber-50 to-orange-50 border-t border-amber-100 flex justify-end">
               <button onclick="shareWhatsApp(\`${title.replace(/`/g, '')}\`, \`${(e.event_date || '') + ' ' + (e.location || '')}\`)"
-                class="text-xs font-bold text-emerald-700 hover:text-emerald-800 transition">
+                class="font-mono-meta text-[11px] font-semibold text-emerald-800 hover:underline">
                 ${t.share}
               </button>
             </div>
+            <h3 class="font-editorial text-lg font-bold text-[#2E0602] leading-snug">${title}</h3>
+            ${e.poster_url ? `<img src="${e.poster_url}" alt="Patrika" loading="lazy" class="mt-3 border border-[#DDD0BE] max-h-80 object-contain bg-stone-50" />` : ''}
+            ${desc ? `<p class="text-xs sm:text-sm text-stone-700 mt-2 whitespace-pre-line leading-relaxed">${desc}</p>` : ''}
           </article>`;
         }).join('');
       }
 
-      // 2. Thaniyans
-      const thBox = document.getElementById('thaniyans-list');
-      thBox.innerHTML = cache.thaniyans.map(item => {
-        const showEnglish = lang === 'en' && item.english_iast;
+      // 2. Thaniyans Compendium
+      document.getElementById('thaniyans-list').innerHTML = cache.thaniyans.map((item, idx) => {
+        const skt = item.sanskrit_text || item.devanagari_text || '';
         return `
-        <div class="card-lift bg-gradient-to-br from-white via-amber-50/50 to-orange-50/50 p-5 sm:p-6 rounded-3xl shadow-sm border border-amber-200 border-l-4 border-l-red-700 space-y-3">
-          <div class="flex items-center justify-between gap-2 border-b border-amber-200/70 pb-2.5">
-            <h3 class="font-heritage font-bold text-sm sm:text-base text-[#581107]">🪷 ${item.title}</h3>
+        <div class="p-4 sm:p-5 hover:bg-[#FCF9F2] transition space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="font-mono-meta text-xs text-[#B9380C] font-bold">${String(idx + 1).padStart(2, '0')}.</span>
+              <h3 class="font-heritage text-sm font-bold text-[#430A04]">${item.title}</h3>
+            </div>
             <button onclick="copyText(\`${(item.tamil_text + (item.english_iast ? '\n' + item.english_iast : '')).replace(/`/g, '')}\`, this)"
-              class="text-xs bg-amber-200/80 hover:bg-amber-300 text-orange-950 font-bold px-3 py-1 rounded-lg transition active:scale-95">
+              class="font-mono-meta text-[10px] font-bold bg-[#F3E9D8] hover:bg-[#C5933E] hover:text-[#2B0602] text-stone-800 border border-[#DDD0BE] px-2.5 py-1 rounded-sm transition">
               ${t.copy}
             </button>
           </div>
-          <p class="font-tamil text-sm sm:text-base font-semibold text-stone-900 whitespace-pre-line leading-loose">${item.tamil_text}</p>
-          ${showEnglish ? `<p class="text-xs sm:text-sm italic text-stone-600 whitespace-pre-line leading-relaxed pt-1 border-t border-amber-100">${item.english_iast}</p>` : ''}
-          ${item.meaning ? `<p class="text-xs text-stone-600 bg-white/90 p-3 rounded-xl border border-amber-100">${item.meaning}</p>` : ''}
+          ${skt ? `<p class="font-sanskrit text-xs sm:text-sm text-[#6E1409] font-semibold whitespace-pre-line leading-relaxed bg-[#FAF4EA] px-3 py-2 border-l-2 border-[#C5933E]">${skt}</p>` : ''}
+          <p class="font-tamil text-sm font-semibold text-stone-900 whitespace-pre-line leading-loose">${item.tamil_text}</p>
+          ${lang === 'en' && item.english_iast ? `<p class="text-xs italic text-stone-600 whitespace-pre-line">${item.english_iast}</p>` : ''}
+          ${item.meaning ? `<p class="text-xs text-stone-600 border-t border-dashed border-[#DDD0BE] pt-2">${item.meaning}</p>` : ''}
         </div>`;
       }).join('');
 
-      // 3. Interactive Guru Parampara Lineage
+      // 3. Guru Parampara Register
+      document.getElementById('lineage-count').textContent = `${cache.lineage.length} ACHARYAS`;
       document.getElementById('lineage-list').innerHTML = cache.lineage.map((n, idx) => `
-        <div onclick="toggleNode('${n.id || idx}')" class="cursor-pointer card-lift relative bg-white p-4 sm:p-5 rounded-2xl border border-amber-200 shadow-sm hover:border-orange-500">
-          <span class="w-4 h-4 bg-gradient-to-br from-red-600 via-orange-500 to-amber-400 rounded-full absolute -left-[33px] top-5 ring-4 ring-[#FFF8EE] shadow"></span>
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <h3 class="font-bold text-[#4A0E06] text-sm sm:text-base flex items-center gap-2">
-              <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gradient-to-br from-orange-600 to-red-700 text-white text-xs font-extrabold shadow-sm">${idx + 1}</span>
-              ${(lang === 'ta' && n.name_ta) ? n.name_ta : n.name_en}
-            </h3>
-            <div class="flex items-center gap-2">
-              ${n.era_or_star ? `<span class="text-xs bg-amber-100 text-orange-950 border border-amber-300 px-3 py-0.5 rounded-full font-bold">${n.era_or_star}</span>` : ''}
-              <span class="text-xs text-orange-600 font-bold">▾</span>
+        <div onclick="toggleNode(${idx})" class="cursor-pointer p-3.5 hover:bg-[#FAF4EA] transition">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-mono-meta text-[11px] font-bold text-[#B9380C]">${String(idx + 1).padStart(2, '0')}</span>
+                <h3 class="font-bold text-xs sm:text-sm text-[#2E0602]">
+                  ${(lang === 'ta' && n.name_ta) ? n.name_ta : n.name_en}
+                </h3>
+              </div>
+              ${n.era_or_star ? `<p class="font-mono-meta text-[10px] text-stone-500 mt-0.5 pl-6">${n.era_or_star}</p>` : ''}
             </div>
+            <span class="font-mono-meta text-xs text-stone-400">▾</span>
           </div>
-          <p id="bio-${n.id || idx}" class="text-xs sm:text-sm text-stone-600 mt-2.5 leading-relaxed border-t border-amber-100 pt-2">
+          <p id="bio-${idx}" class="text-xs text-stone-700 mt-2 pl-6 leading-relaxed border-t border-[#EFE7D8] pt-2">
             ${(lang === 'ta' && n.bio_ta) ? n.bio_ta : (n.bio_en || '')}
           </p>
         </div>
@@ -538,33 +526,27 @@
       }
     }
 
-    // Smooth Scroll Reveal Observer
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('in-view');
-      });
-    }, { threshold: 0.08 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
     async function loadData() {
       renderVerse();
-      const saved = localStorage.getItem('thirumaligai_cache_v4');
-      if (saved) { cache = JSON.parse(saved); renderAll(); }
-
-      const [ev, th, ln, ct] = await Promise.all([
-        sb.from('events').select('*').order('is_pinned', { ascending: false }).order('event_date', { ascending: false }),
-        sb.from('thaniyans').select('*').order('sort_order', { ascending: true }),
-        sb.from('parampara_nodes').select('*').order('sort_order', { ascending: true }),
-        sb.from('site_content').select('*')
-      ]);
-
-      if (ev.data) cache.events = ev.data;
-      if (th.data) cache.thaniyans = th.data;
-      if (ln.data) cache.lineage = ln.data;
-      if (ct.data) cache.content = ct.data;
-
-      localStorage.setItem('thirumaligai_cache_v4', JSON.stringify(cache));
       renderAll();
+
+      try {
+        const [ev, th, ln, ct] = await Promise.all([
+          sb.from('events').select('*').order('is_pinned', { ascending: false }).order('event_date', { ascending: false }),
+          sb.from('thaniyans').select('*').order('sort_order', { ascending: true }),
+          sb.from('parampara_nodes').select('*').order('sort_order', { ascending: true }),
+          sb.from('site_content').select('*')
+        ]);
+
+        if (ev.data) cache.events = ev.data;
+        if (th.data && th.data.length) cache.thaniyans = th.data;
+        if (ln.data && ln.data.length) cache.lineage = ln.data;
+        if (ct.data) cache.content = ct.data;
+
+        renderAll();
+      } catch (err) {
+        console.warn('Using baseline archival data until config.js keys are set.');
+      }
     }
 
     loadData();
