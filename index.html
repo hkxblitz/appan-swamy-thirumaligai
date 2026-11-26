@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kovil Kandhadai Appan Thirumaligai | Shishya Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-amber-50/60 text-stone-800 font-sans antialiased">
+
+  <!-- Header -->
+  <header class="bg-orange-900 text-amber-50 sticky top-0 z-20 shadow">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div>
+        <h1 class="text-lg font-bold tracking-tight" id="site-title">Kovil Kandhadai Appan Thirumaligai</h1>
+        <p class="text-xs text-amber-200" id="site-subtitle">Kanchipuram • Shishya Info & Archive</p>
+      </div>
+      <button onclick="toggleLang()" id="lang-btn" class="bg-amber-100 text-orange-950 text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm active:scale-95">
+        தமிழ்
+      </button>
+    </div>
+    <!-- Quick Nav -->
+    <nav class="bg-orange-950/60 text-xs flex justify-around py-2 border-t border-orange-800">
+      <a href="#events-sec" class="hover:text-amber-300 font-medium">Announcements</a>
+      <a href="#thaniyan-sec" class="hover:text-amber-300 font-medium">Thaniyans</a>
+      <a href="#lineage-sec" class="hover:text-amber-300 font-medium">Parampara</a>
+      <a href="#history-sec" class="hover:text-amber-300 font-medium">History</a>
+    </nav>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-6 space-y-10">
+
+    <!-- Section 1: Announcements & Sancharam -->
+    <section id="events-sec">
+      <h2 class="text-lg font-bold text-orange-950 border-b-2 border-orange-200 pb-1 mb-4">
+        Sancharam & Announcements
+      </h2>
+      <div id="events-list" class="space-y-4">
+        <p class="text-sm text-stone-500">Loading updates...</p>
+      </div>
+    </section>
+
+    <!-- Section 2: Thaniyans -->
+    <section id="thaniyan-sec">
+      <div class="flex items-center justify-between border-b-2 border-orange-200 pb-1 mb-4">
+        <h2 class="text-lg font-bold text-orange-950">Thaniyans & Stotras</h2>
+        <select id="script-select" onchange="renderThaniyans()" class="text-xs bg-white border border-stone-300 rounded px-2 py-1">
+          <option value="both">Tamil + English</option>
+          <option value="tamil">Tamil Only</option>
+          <option value="english">English (IAST)</option>
+        </select>
+      </div>
+      <div id="thaniyans-list" class="space-y-4"></div>
+    </section>
+
+    <!-- Section 3: Guru Parampara Timeline -->
+    <section id="lineage-sec">
+      <h2 class="text-lg font-bold text-orange-950 border-b-2 border-orange-200 pb-1 mb-4">
+        Guru Parampara Lineage
+      </h2>
+      <div id="lineage-list" class="border-l-2 border-orange-400 ml-3 pl-5 space-y-5"></div>
+    </section>
+
+    <!-- Section 4: History (Auto-hides if empty) -->
+    <section id="history-sec" class="hidden">
+      <h2 class="text-lg font-bold text-orange-950 border-b-2 border-orange-200 pb-1 mb-4" id="hist-heading">
+        Thirumaligai History
+      </h2>
+      <div id="history-body" class="bg-white p-4 rounded-xl shadow-sm border border-amber-100 text-sm leading-relaxed whitespace-pre-line"></div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-3xl mx-auto px-4 py-8 text-center text-xs text-stone-500 border-t border-amber-200 mt-8">
+    Community-maintained shishya archive & notice board for Kovil Kandhadai Appan Thirumaligai. Not an official trust portal.
+  </footer>
+
+  <script src="config.js"></script>
+  <script>
+    let lang = 'en';
+    let cache = { events: [], thaniyans: [], lineage: [], content: [] };
+
+    function toggleLang() {
+      lang = lang === 'en' ? 'ta' : 'en';
+      document.getElementById('lang-btn').textContent = lang === 'en' ? 'தமிழ்' : 'English';
+      document.getElementById('site-title').textContent = lang === 'en'
+        ? 'Kovil Kandhadai Appan Thirumaligai'
+        : 'கோவில் கந்தாடை அப்பன் திருமாளிகை';
+      renderAll();
+    }
+
+    function renderAll() {
+      // 1. Events
+      const evBox = document.getElementById('events-list');
+      if (!cache.events.length) {
+        evBox.innerHTML = `<p class="text-sm text-stone-500 bg-white p-4 rounded-xl border border-amber-100">No upcoming events posted yet.</p>`;
+      } else {
+        evBox.innerHTML = cache.events.map(e => `
+          <article class="bg-white p-4 rounded-xl shadow-sm border ${e.is_pinned ? 'border-orange-400 ring-1 ring-orange-200' : 'border-amber-100'}">
+            <div class="flex justify-between items-start gap-2">
+              <h3 class="font-bold text-orange-950 text-base">${lang === 'ta' && e.title_ta ? e.title_ta : e.title_en}</h3>
+              ${e.is_pinned ? '<span class="text-[10px] bg-orange-100 text-orange-800 px-2 py-0.5 rounded-full font-semibold">Pinned</span>' : ''}
+            </div>
+            <p class="text-xs text-orange-700 font-medium mt-1">${e.event_date || ''} ${e.location ? '• ' + e.location : ''}</p>
+            ${e.poster_url ? `<img src="${e.poster_url}" alt="Patrika" loading="lazy" class="mt-3 rounded-lg max-h-80 w-full object-contain bg-stone-50 border" />` : ''}
+            <p class="text-sm text-stone-700 mt-3 whitespace-pre-line">${lang === 'ta' && e.description_ta ? e.description_ta : (e.description_en || '')}</p>
+          </article>
+        `).join('');
+      }
+
+      // 2. Thaniyans
+      renderThaniyans();
+
+      // 3. Lineage
+      document.getElementById('lineage-list').innerHTML = cache.lineage.map(n => `
+        <div class="relative">
+          <span class="w-3 h-3 bg-orange-700 rounded-full absolute -left-[27px] top-1.5 ring-4 ring-amber-50"></span>
+          <h3 class="font-bold text-stone-900 text-sm">${lang === 'ta' && n.name_ta ? n.name_ta : n.name_en}</h3>
+          ${n.era_or_star ? `<span class="text-xs text-orange-800 font-medium">${n.era_or_star}</span>` : ''}
+          <p class="text-xs text-stone-600 mt-1">${lang === 'ta' && n.bio_ta ? n.bio_ta : (n.bio_en || '')}</p>
+        </div>
+      `).join('');
+
+      // 4. History
+      const hist = cache.content.find(c => c.section_key === 'history');
+      const histSec = document.getElementById('history-sec');
+      if (hist && (hist.body_en || hist.body_ta)) {
+        histSec.classList.remove('hidden');
+        document.getElementById('history-body').textContent = lang === 'ta' && hist.body_ta ? hist.body_ta : hist.body_en;
+      } else {
+        histSec.classList.add('hidden');
+      }
+    }
+
+    function renderThaniyans() {
+      const mode = document.getElementById('script-select').value;
+      document.getElementById('thaniyans-list').innerHTML = cache.thaniyans.map(t => `
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-amber-100 space-y-2">
+          <h3 class="font-bold text-sm text-orange-900">${t.title}</h3>
+          ${mode !== 'english' ? `<p class="text-sm font-medium text-stone-900 whitespace-pre-line leading-relaxed">${t.tamil_text}</p>` : ''}
+          ${mode !== 'tamil' && t.english_iast ? `<p class="text-xs italic text-stone-600 whitespace-pre-line">${t.english_iast}</p>` : ''}
+          ${t.meaning ? `<p class="text-xs text-stone-500 border-t pt-2">${t.meaning}</p>` : ''}
+        </div>
+      `).join('');
+    }
+
+    async function loadData() {
+      // Instant render from localStorage if available
+      const saved = localStorage.getItem('thirumaligai_cache');
+      if (saved) { cache = JSON.parse(saved); renderAll(); }
+
+      // Fetch fresh data in parallel
+      const [ev, th, ln, ct] = await Promise.all([
+        sb.from('events').select('*').order('is_pinned', { ascending: false }).order('event_date', { ascending: false }),
+        sb.from('thaniyans').select('*').order('sort_order', { ascending: true }),
+        sb.from('parampara_nodes').select('*').order('sort_order', { ascending: true }),
+        sb.from('site_content').select('*')
+      ]);
+
+      if (ev.data) cache.events = ev.data;
+      if (th.data) cache.thaniyans = th.data;
+      if (ln.data) cache.lineage = ln.data;
+      if (ct.data) cache.content = ct.data;
+
+      localStorage.setItem('thirumaligai_cache', JSON.stringify(cache));
+      renderAll();
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
