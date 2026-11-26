@@ -1,79 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kovil Kandhadai Appan Thirumaligai | Shishya Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Serif+Tamil:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', 'Noto Serif Tamil', sans-serif; }
+    .font-heritage { font-family: 'Cinzel', 'Noto Serif Tamil', serif; }
+    .font-tamil { font-family: 'Noto Serif Tamil', serif; }
+  </style>
 </head>
-<body class="bg-amber-50/60 text-stone-800 font-sans antialiased">
+<body class="bg-[#FDFBF7] text-stone-800 antialiased selection:bg-amber-200">
 
-  <!-- Header -->
-  <header class="bg-orange-900 text-amber-50 sticky top-0 z-20 shadow">
-    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div>
-        <h1 class="text-lg font-bold tracking-tight" id="site-title">Kovil Kandhadai Appan Thirumaligai</h1>
-        <p class="text-xs text-amber-200" id="site-subtitle">Kanchipuram • Shishya Info & Archive</p>
+  <!-- Sticky Glass Top Bar -->
+  <header class="sticky top-0 z-30 bg-[#4A1508]/95 backdrop-blur-md text-amber-50 border-b border-amber-500/20 shadow-md">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-300 to-amber-600 flex items-center justify-center text-[#4A1508] font-bold text-sm shadow">
+          ॐ
+        </div>
+        <div>
+          <span class="font-heritage text-sm sm:text-base font-bold tracking-wide block leading-tight" id="nav-title">
+            Appan Swamy Thirumaligai
+          </span>
+          <span class="text-[11px] text-amber-200/80 block">Kanchipuram • Shishya Archive</span>
+        </div>
       </div>
-      <button onclick="toggleLang()" id="lang-btn" class="bg-amber-100 text-orange-950 text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm active:scale-95">
-        தமிழ்
-      </button>
+
+      <div class="flex items-center gap-2">
+        <button onclick="toggleLang()" id="lang-btn"
+          class="bg-amber-400 hover:bg-amber-300 text-[#3B0F05] text-xs font-bold px-3.5 py-1.5 rounded-full shadow transition active:scale-95">
+          தமிழ்
+        </button>
+      </div>
     </div>
-    <!-- Quick Nav -->
-    <nav class="bg-orange-950/60 text-xs flex justify-around py-2 border-t border-orange-800">
-      <a href="#events-sec" class="hover:text-amber-300 font-medium">Announcements</a>
-      <a href="#thaniyan-sec" class="hover:text-amber-300 font-medium">Thaniyans</a>
-      <a href="#lineage-sec" class="hover:text-amber-300 font-medium">Parampara</a>
-      <a href="#history-sec" class="hover:text-amber-300 font-medium">History</a>
+
+    <!-- Pill Navigation -->
+    <nav class="max-w-4xl mx-auto px-4 pb-2.5 flex gap-2 overflow-x-auto text-xs">
+      <a href="#events-sec" class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-amber-100 whitespace-nowrap transition">Announcements</a>
+      <a href="#thaniyan-sec" class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-amber-100 whitespace-nowrap transition">Thaniyans</a>
+      <a href="#lineage-sec" class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-amber-100 whitespace-nowrap transition">Guru Parampara</a>
+      <a href="#history-sec" id="nav-hist" class="hidden px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-amber-100 whitespace-nowrap transition">History</a>
     </nav>
   </header>
 
-  <main class="max-w-3xl mx-auto px-4 py-6 space-y-10">
+  <!-- Hero Banner -->
+  <section class="relative overflow-hidden bg-gradient-to-b from-[#5C1A0B] via-[#7A2510] to-[#FDFBF7] text-amber-50 pt-8 pb-14 px-4">
+    <div class="max-w-4xl mx-auto text-center space-y-3">
+      <p class="text-xs uppercase tracking-[0.2em] text-amber-300 font-semibold">
+        ஸ்ரீமதே ராமாநுஜாய நம: • ஸ்ரீமதே வரவரமுநயே நம:
+      </p>
+      <h1 class="font-heritage text-2xl sm:text-4xl font-bold text-white leading-snug" id="hero-title">
+        Kovil Kandhadai Appan Thirumaligai
+      </h1>
+      <p class="text-xs sm:text-sm text-amber-100/90 max-w-xl mx-auto leading-relaxed" id="hero-desc">
+        A digital sanctuary for shishyas—preserving our Acharya Thaniyans, Guru Parampara lineage, and Kanchipuram Thirumaligai sancharam updates.
+      </p>
+
+      <!-- Quick Stats / Info Pills -->
+      <div class="pt-3 flex flex-wrap justify-center gap-2 text-[11px]">
+        <span class="bg-black/25 border border-amber-400/30 px-3 py-1 rounded-full text-amber-200">
+          Gotram: Vadhula
+        </span>
+        <span class="bg-black/25 border border-amber-400/30 px-3 py-1 rounded-full text-amber-200">
+          Thirunakshatram: Purattasi Magam
+        </span>
+        <span class="bg-black/25 border border-amber-400/30 px-3 py-1 rounded-full text-amber-200" id="today-date">
+          Today
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-4 -mt-6 space-y-12 pb-16">
 
     <!-- Section 1: Announcements & Sancharam -->
-    <section id="events-sec">
-      <h2 class="text-lg font-bold text-orange-950 border-b-2 border-orange-200 pb-1 mb-4">
-        Sancharam & Announcements
-      </h2>
-      <div id="events-list" class="space-y-4">
-        <p class="text-sm text-stone-500">Loading updates...</p>
+    <section id="events-sec" class="scroll-mt-28">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-6 rounded-full bg-amber-600"></span>
+          <h2 class="font-heritage text-lg sm:text-xl font-bold text-stone-900">Sancharam & Announcements</h2>
+        </div>
+        <span class="text-xs text-stone-500" id="event-count"></span>
+      </div>
+
+      <div id="events-list" class="grid gap-4 sm:grid-cols-2">
+        <div class="bg-white p-6 rounded-2xl border border-amber-200/70 shadow-sm text-sm text-stone-500 col-span-full">
+          Loading latest updates...
+        </div>
       </div>
     </section>
 
-    <!-- Section 2: Thaniyans -->
-    <section id="thaniyan-sec">
-      <div class="flex items-center justify-between border-b-2 border-orange-200 pb-1 mb-4">
-        <h2 class="text-lg font-bold text-orange-950">Thaniyans & Stotras</h2>
-        <select id="script-select" onchange="renderThaniyans()" class="text-xs bg-white border border-stone-300 rounded px-2 py-1">
-          <option value="both">Tamil + English</option>
-          <option value="tamil">Tamil Only</option>
-          <option value="english">English (IAST)</option>
+    <!-- Section 2: Thaniyans & Stotras -->
+    <section id="thaniyan-sec" class="scroll-mt-28">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-6 rounded-full bg-amber-600"></span>
+          <h2 class="font-heritage text-lg sm:text-xl font-bold text-stone-900">Thaniyans & Stotras</h2>
+        </div>
+        <select id="script-select" onchange="renderThaniyans()"
+          class="text-xs font-medium bg-white border border-amber-300 text-stone-800 rounded-xl px-3 py-1.5 shadow-sm focus:outline-none">
+          <option value="both">Tamil + English (IAST)</option>
+          <option value="tamil">Tamil Script Only</option>
+          <option value="english">English (IAST) Only</option>
         </select>
       </div>
+
       <div id="thaniyans-list" class="space-y-4"></div>
     </section>
 
     <!-- Section 3: Guru Parampara Timeline -->
-    <section id="lineage-sec">
-      <h2 class="text-lg font-bold text-orange-950 border-b-2 border-orange-200 pb-1 mb-4">
-        Guru Parampara Lineage
-      </h2>
-      <div id="lineage-list" class="border-l-2 border-orange-400 ml-3 pl-5 space-y-5"></div>
+    <section id="lineage-sec" class="scroll-mt-28">
+      <div class="flex items-center gap-2 mb-5">
+        <span class="w-2 h-6 rounded-full bg-amber-600"></span>
+        <h2 class="font-heritage text-lg sm:text-xl font-bold text-stone-900">Guru Parampara Lineage</h2>
+      </div>
+
+      <div id="lineage-list" class="relative border-l-2 border-amber-400 ml-3.5 pl-6 space-y-5"></div>
     </section>
 
-    <!-- Section 4: History (Auto-hides if empty) -->
-    <section id="history-sec" class="hidden">
-      <h2 class="text-lg font-bold text-orange-950 border-b-2 border-orange-200 pb-1 mb-4" id="hist-heading">
-        Thirumaligai History
-      </h2>
-      <div id="history-body" class="bg-white p-4 rounded-xl shadow-sm border border-amber-100 text-sm leading-relaxed whitespace-pre-line"></div>
+    <!-- Section 4: History -->
+    <section id="history-sec" class="hidden scroll-mt-28">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-2 h-6 rounded-full bg-amber-600"></span>
+        <h2 class="font-heritage text-lg sm:text-xl font-bold text-stone-900">Thirumaligai History</h2>
+      </div>
+      <div id="history-body" class="bg-white p-6 rounded-2xl shadow-sm border border-amber-200/70 text-sm sm:text-base leading-relaxed text-stone-700 whitespace-pre-line"></div>
     </section>
 
   </main>
 
-  <footer class="max-w-3xl mx-auto px-4 py-8 text-center text-xs text-stone-500 border-t border-amber-200 mt-8">
-    Community-maintained shishya archive & notice board for Kovil Kandhadai Appan Thirumaligai. Not an official trust portal.
+  <footer class="bg-stone-900 text-stone-400 text-center text-xs py-8 px-4">
+    <p class="max-w-xl mx-auto leading-relaxed">
+      Shishya Kainkaryam — Community-maintained digital archive & notice board for Kovil Kandhadai Appan Thirumaligai. Not an official trust portal.
+    </p>
   </footer>
 
   <script src="config.js"></script>
@@ -81,76 +146,138 @@
     let lang = 'en';
     let cache = { events: [], thaniyans: [], lineage: [], content: [] };
 
+    document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-IN', {
+      weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+    });
+
     function toggleLang() {
       lang = lang === 'en' ? 'ta' : 'en';
       document.getElementById('lang-btn').textContent = lang === 'en' ? 'தமிழ்' : 'English';
-      document.getElementById('site-title').textContent = lang === 'en'
+      document.getElementById('hero-title').textContent = lang === 'en'
         ? 'Kovil Kandhadai Appan Thirumaligai'
         : 'கோவில் கந்தாடை அப்பன் திருமாளிகை';
+      document.getElementById('nav-title').textContent = lang === 'en'
+        ? 'Appan Swamy Thirumaligai'
+        : 'அப்பன் ஸ்வாமி திருமாளிகை';
       renderAll();
+    }
+
+    function copyText(text, btn) {
+      navigator.clipboard.writeText(text);
+      const old = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = old, 1500);
+    }
+
+    function shareWhatsApp(title, body) {
+      const msg = `*${title}*\n${body}\n\nMore updates: ${window.location.origin}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
     function renderAll() {
       // 1. Events
       const evBox = document.getElementById('events-list');
+      document.getElementById('event-count').textContent = cache.events.length ? `${cache.events.length} updates` : '';
       if (!cache.events.length) {
-        evBox.innerHTML = `<p class="text-sm text-stone-500 bg-white p-4 rounded-xl border border-amber-100">No upcoming events posted yet.</p>`;
+        evBox.innerHTML = `
+          <div class="bg-white p-6 rounded-2xl border border-amber-200/70 shadow-sm text-center col-span-full">
+            <p class="text-sm font-medium text-stone-700">No upcoming sancharam or utsavams posted yet.</p>
+            <p class="text-xs text-stone-500 mt-1">Check back soon for Purattasi Magam & Thirumaligai announcements.</p>
+          </div>`;
       } else {
-        evBox.innerHTML = cache.events.map(e => `
-          <article class="bg-white p-4 rounded-xl shadow-sm border ${e.is_pinned ? 'border-orange-400 ring-1 ring-orange-200' : 'border-amber-100'}">
-            <div class="flex justify-between items-start gap-2">
-              <h3 class="font-bold text-orange-950 text-base">${lang === 'ta' && e.title_ta ? e.title_ta : e.title_en}</h3>
-              ${e.is_pinned ? '<span class="text-[10px] bg-orange-100 text-orange-800 px-2 py-0.5 rounded-full font-semibold">Pinned</span>' : ''}
+        evBox.innerHTML = cache.events.map(e => {
+          const title = lang === 'ta' && e.title_ta ? e.title_ta : e.title_en;
+          const desc = lang === 'ta' && e.description_ta ? e.description_ta : (e.description_en || '');
+          return `
+          <article class="bg-white rounded-2xl shadow-sm border ${e.is_pinned ? 'border-amber-500 ring-2 ring-amber-500/20 col-span-full' : 'border-amber-200/70'} overflow-hidden flex flex-col justify-between">
+            <div>
+              ${e.poster_url ? `<img src="${e.poster_url}" alt="Patrika" loading="lazy" class="w-full max-h-80 object-contain bg-amber-50/50 border-b border-amber-100" />` : ''}
+              <div class="p-5">
+                <div class="flex items-start justify-between gap-2">
+                  <h3 class="font-bold text-stone-900 text-base leading-snug">${title}</h3>
+                  ${e.is_pinned ? '<span class="shrink-0 text-[10px] uppercase tracking-wider bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded-full font-bold">Featured</span>' : ''}
+                </div>
+                <div class="flex flex-wrap gap-2 text-xs text-amber-800 font-semibold mt-2">
+                  ${e.event_date ? `<span class="bg-amber-50 px-2.5 py-0.5 rounded-md border border-amber-200">📅 ${e.event_date}</span>` : ''}
+                  ${e.location ? `<span class="bg-amber-50 px-2.5 py-0.5 rounded-md border border-amber-200">📍 ${e.location}</span>` : ''}
+                </div>
+                <p class="text-sm text-stone-600 mt-3 whitespace-pre-line leading-relaxed">${desc}</p>
+              </div>
             </div>
-            <p class="text-xs text-orange-700 font-medium mt-1">${e.event_date || ''} ${e.location ? '• ' + e.location : ''}</p>
-            ${e.poster_url ? `<img src="${e.poster_url}" alt="Patrika" loading="lazy" class="mt-3 rounded-lg max-h-80 w-full object-contain bg-stone-50 border" />` : ''}
-            <p class="text-sm text-stone-700 mt-3 whitespace-pre-line">${lang === 'ta' && e.description_ta ? e.description_ta : (e.description_en || '')}</p>
-          </article>
-        `).join('');
+            <div class="px-5 py-3 bg-stone-50 border-t border-stone-100 flex justify-end">
+              <button onclick="shareWhatsApp(\`${title.replace(/`/g, '')}\`, \`${(e.event_date || '') + ' ' + (e.location || '')}\`)"
+                class="text-xs font-semibold text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
+                Share on WhatsApp ↗
+              </button>
+            </div>
+          </article>`;
+        }).join('');
       }
 
       // 2. Thaniyans
       renderThaniyans();
 
       // 3. Lineage
-      document.getElementById('lineage-list').innerHTML = cache.lineage.map(n => `
-        <div class="relative">
-          <span class="w-3 h-3 bg-orange-700 rounded-full absolute -left-[27px] top-1.5 ring-4 ring-amber-50"></span>
-          <h3 class="font-bold text-stone-900 text-sm">${lang === 'ta' && n.name_ta ? n.name_ta : n.name_en}</h3>
-          ${n.era_or_star ? `<span class="text-xs text-orange-800 font-medium">${n.era_or_star}</span>` : ''}
-          <p class="text-xs text-stone-600 mt-1">${lang === 'ta' && n.bio_ta ? n.bio_ta : (n.bio_en || '')}</p>
-        </div>
-      `).join('');
+      const lnBox = document.getElementById('lineage-list');
+      if (!cache.lineage.length) {
+        lnBox.innerHTML = `<p class="text-xs text-stone-500">Connect Supabase keys in config.js to load Guru Parampara.</p>`;
+      } else {
+        lnBox.innerHTML = cache.lineage.map((n, idx) => `
+          <div class="relative bg-white p-4 rounded-2xl border border-amber-200/70 shadow-sm hover:border-amber-400 transition">
+            <span class="w-3.5 h-3.5 bg-amber-600 rounded-full absolute -left-[33px] top-5 ring-4 ring-[#FDFBF7]"></span>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="font-bold text-stone-900 text-sm sm:text-base">
+                <span class="text-amber-700 mr-1">#${idx + 1}</span>
+                ${lang === 'ta' && n.name_ta ? n.name_ta : n.name_en}
+              </h3>
+              ${n.era_or_star ? `<span class="text-[11px] bg-amber-50 text-amber-900 border border-amber-200 px-2.5 py-0.5 rounded-full font-semibold">${n.era_or_star}</span>` : ''}
+            </div>
+            <p class="text-xs sm:text-sm text-stone-600 mt-1.5 leading-relaxed">${lang === 'ta' && n.bio_ta ? n.bio_ta : (n.bio_en || '')}</p>
+          </div>
+        `).join('');
+      }
 
       // 4. History
       const hist = cache.content.find(c => c.section_key === 'history');
       const histSec = document.getElementById('history-sec');
+      const navHist = document.getElementById('nav-hist');
       if (hist && (hist.body_en || hist.body_ta)) {
         histSec.classList.remove('hidden');
+        navHist.classList.remove('hidden');
         document.getElementById('history-body').textContent = lang === 'ta' && hist.body_ta ? hist.body_ta : hist.body_en;
       } else {
         histSec.classList.add('hidden');
+        navHist.classList.add('hidden');
       }
     }
 
     function renderThaniyans() {
       const mode = document.getElementById('script-select').value;
-      document.getElementById('thaniyans-list').innerHTML = cache.thaniyans.map(t => `
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-amber-100 space-y-2">
-          <h3 class="font-bold text-sm text-orange-900">${t.title}</h3>
-          ${mode !== 'english' ? `<p class="text-sm font-medium text-stone-900 whitespace-pre-line leading-relaxed">${t.tamil_text}</p>` : ''}
-          ${mode !== 'tamil' && t.english_iast ? `<p class="text-xs italic text-stone-600 whitespace-pre-line">${t.english_iast}</p>` : ''}
-          ${t.meaning ? `<p class="text-xs text-stone-500 border-t pt-2">${t.meaning}</p>` : ''}
+      const box = document.getElementById('thaniyans-list');
+      if (!cache.thaniyans.length) {
+        box.innerHTML = `<p class="text-xs text-stone-500">Connect Supabase keys in config.js to load Thaniyans.</p>`;
+        return;
+      }
+      box.innerHTML = cache.thaniyans.map(t => `
+        <div class="bg-gradient-to-br from-white to-amber-50/40 p-5 rounded-2xl shadow-sm border border-amber-200/80 space-y-3">
+          <div class="flex items-center justify-between gap-2 border-b border-amber-100 pb-2">
+            <h3 class="font-heritage font-bold text-sm sm:text-base text-[#5C1A0B]">${t.title}</h3>
+            <button onclick="copyText(\`${(t.tamil_text + '\n' + (t.english_iast || '')).replace(/`/g, '')}\`, this)"
+              class="text-[11px] bg-amber-100 hover:bg-amber-200 text-amber-950 font-semibold px-2.5 py-1 rounded-lg transition">
+              Copy
+            </button>
+          </div>
+          ${mode !== 'english' ? `<p class="font-tamil text-sm sm:text-base font-semibold text-stone-900 whitespace-pre-line leading-loose">${t.tamil_text}</p>` : ''}
+          ${mode !== 'tamil' && t.english_iast ? `<p class="text-xs sm:text-sm italic text-stone-600 whitespace-pre-line leading-relaxed">${t.english_iast}</p>` : ''}
+          ${t.meaning ? `<p class="text-xs text-stone-500 bg-white/80 p-3 rounded-xl border border-amber-100">${t.meaning}</p>` : ''}
         </div>
       `).join('');
     }
 
     async function loadData() {
-      // Instant render from localStorage if available
-      const saved = localStorage.getItem('thirumaligai_cache');
+      const saved = localStorage.getItem('thirumaligai_cache_v2');
       if (saved) { cache = JSON.parse(saved); renderAll(); }
 
-      // Fetch fresh data in parallel
       const [ev, th, ln, ct] = await Promise.all([
         sb.from('events').select('*').order('is_pinned', { ascending: false }).order('event_date', { ascending: false }),
         sb.from('thaniyans').select('*').order('sort_order', { ascending: true }),
@@ -163,7 +290,306 @@
       if (ln.data) cache.lineage = ln.data;
       if (ct.data) cache.content = ct.data;
 
-      localStorage.setItem('thirumaligai_cache', JSON.stringify(cache));
+      localStorage.setItem('thirumaligai_cache_v2', JSON.stringify(cache));
+      renderAll();
+    }
+
+    loadData();
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kovil Kandhadai Appan Thirumaligai | Shishya Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Serif+Tamil:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', 'Noto Serif Tamil', sans-serif; }
+    .font-heritage { font-family: 'Cinzel', 'Noto Serif Tamil', serif; }
+    .font-tamil { font-family: 'Noto Serif Tamil', serif; }
+  </style>
+</head>
+<body class="bg-[#FDFBF7] text-stone-800 antialiased selection:bg-amber-200">
+
+  <!-- Sticky Glass Top Bar -->
+  <header class="sticky top-0 z-30 bg-[#4A1508]/95 backdrop-blur-md text-amber-50 border-b border-amber-500/20 shadow-md">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-300 to-amber-600 flex items-center justify-center text-[#4A1508] font-bold text-sm shadow">
+          ॐ
+        </div>
+        <div>
+          <span class="font-heritage text-sm sm:text-base font-bold tracking-wide block leading-tight" id="nav-title">
+            Appan Swamy Thirumaligai
+          </span>
+          <span class="text-[11px] text-amber-200/80 block">Kanchipuram • Shishya Archive</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="toggleLang()" id="lang-btn"
+          class="bg-amber-400 hover:bg-amber-300 text-[#3B0F05] text-xs font-bold px-3.5 py-1.5 rounded-full shadow transition active:scale-95">
+          தமிழ்
+        </button>
+      </div>
+    </div>
+
+    <!-- Pill Navigation -->
+    <nav class="max-w-4xl mx-auto px-4 pb-2.5 flex gap-2 overflow-x-auto text-xs">
+      <a href="#events-sec" class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-amber-100 whitespace-nowrap transition">Announcements</a>
+      <a href="#thaniyan-sec" class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-amber-100 whitespace-nowrap transition">Thaniyans</a>
+      <a href="#lineage-sec" class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-amber-100 whitespace-nowrap transition">Guru Parampara</a>
+      <a href="#history-sec" id="nav-hist" class="hidden px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-amber-100 whitespace-nowrap transition">History</a>
+    </nav>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="relative overflow-hidden bg-gradient-to-b from-[#5C1A0B] via-[#7A2510] to-[#FDFBF7] text-amber-50 pt-8 pb-14 px-4">
+    <div class="max-w-4xl mx-auto text-center space-y-3">
+      <p class="text-xs uppercase tracking-[0.2em] text-amber-300 font-semibold">
+        ஸ்ரீமதே ராமாநுஜாய நம: • ஸ்ரீமதே வரவரமுநயே நம:
+      </p>
+      <h1 class="font-heritage text-2xl sm:text-4xl font-bold text-white leading-snug" id="hero-title">
+        Kovil Kandhadai Appan Thirumaligai
+      </h1>
+      <p class="text-xs sm:text-sm text-amber-100/90 max-w-xl mx-auto leading-relaxed" id="hero-desc">
+        A digital sanctuary for shishyas—preserving our Acharya Thaniyans, Guru Parampara lineage, and Kanchipuram Thirumaligai sancharam updates.
+      </p>
+
+      <!-- Quick Stats / Info Pills -->
+      <div class="pt-3 flex flex-wrap justify-center gap-2 text-[11px]">
+        <span class="bg-black/25 border border-amber-400/30 px-3 py-1 rounded-full text-amber-200">
+          Gotram: Vadhula
+        </span>
+        <span class="bg-black/25 border border-amber-400/30 px-3 py-1 rounded-full text-amber-200">
+          Thirunakshatram: Purattasi Magam
+        </span>
+        <span class="bg-black/25 border border-amber-400/30 px-3 py-1 rounded-full text-amber-200" id="today-date">
+          Today
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-4 -mt-6 space-y-12 pb-16">
+
+    <!-- Section 1: Announcements & Sancharam -->
+    <section id="events-sec" class="scroll-mt-28">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-6 rounded-full bg-amber-600"></span>
+          <h2 class="font-heritage text-lg sm:text-xl font-bold text-stone-900">Sancharam & Announcements</h2>
+        </div>
+        <span class="text-xs text-stone-500" id="event-count"></span>
+      </div>
+
+      <div id="events-list" class="grid gap-4 sm:grid-cols-2">
+        <div class="bg-white p-6 rounded-2xl border border-amber-200/70 shadow-sm text-sm text-stone-500 col-span-full">
+          Loading latest updates...
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Thaniyans & Stotras -->
+    <section id="thaniyan-sec" class="scroll-mt-28">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-6 rounded-full bg-amber-600"></span>
+          <h2 class="font-heritage text-lg sm:text-xl font-bold text-stone-900">Thaniyans & Stotras</h2>
+        </div>
+        <select id="script-select" onchange="renderThaniyans()"
+          class="text-xs font-medium bg-white border border-amber-300 text-stone-800 rounded-xl px-3 py-1.5 shadow-sm focus:outline-none">
+          <option value="both">Tamil + English (IAST)</option>
+          <option value="tamil">Tamil Script Only</option>
+          <option value="english">English (IAST) Only</option>
+        </select>
+      </div>
+
+      <div id="thaniyans-list" class="space-y-4"></div>
+    </section>
+
+    <!-- Section 3: Guru Parampara Timeline -->
+    <section id="lineage-sec" class="scroll-mt-28">
+      <div class="flex items-center gap-2 mb-5">
+        <span class="w-2 h-6 rounded-full bg-amber-600"></span>
+        <h2 class="font-heritage text-lg sm:text-xl font-bold text-stone-900">Guru Parampara Lineage</h2>
+      </div>
+
+      <div id="lineage-list" class="relative border-l-2 border-amber-400 ml-3.5 pl-6 space-y-5"></div>
+    </section>
+
+    <!-- Section 4: History -->
+    <section id="history-sec" class="hidden scroll-mt-28">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-2 h-6 rounded-full bg-amber-600"></span>
+        <h2 class="font-heritage text-lg sm:text-xl font-bold text-stone-900">Thirumaligai History</h2>
+      </div>
+      <div id="history-body" class="bg-white p-6 rounded-2xl shadow-sm border border-amber-200/70 text-sm sm:text-base leading-relaxed text-stone-700 whitespace-pre-line"></div>
+    </section>
+
+  </main>
+
+  <footer class="bg-stone-900 text-stone-400 text-center text-xs py-8 px-4">
+    <p class="max-w-xl mx-auto leading-relaxed">
+      Shishya Kainkaryam — Community-maintained digital archive & notice board for Kovil Kandhadai Appan Thirumaligai. Not an official trust portal.
+    </p>
+  </footer>
+
+  <script src="config.js"></script>
+  <script>
+    let lang = 'en';
+    let cache = { events: [], thaniyans: [], lineage: [], content: [] };
+
+    document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-IN', {
+      weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+    });
+
+    function toggleLang() {
+      lang = lang === 'en' ? 'ta' : 'en';
+      document.getElementById('lang-btn').textContent = lang === 'en' ? 'தமிழ்' : 'English';
+      document.getElementById('hero-title').textContent = lang === 'en'
+        ? 'Kovil Kandhadai Appan Thirumaligai'
+        : 'கோவில் கந்தாடை அப்பன் திருமாளிகை';
+      document.getElementById('nav-title').textContent = lang === 'en'
+        ? 'Appan Swamy Thirumaligai'
+        : 'அப்பன் ஸ்வாமி திருமாளிகை';
+      renderAll();
+    }
+
+    function copyText(text, btn) {
+      navigator.clipboard.writeText(text);
+      const old = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = old, 1500);
+    }
+
+    function shareWhatsApp(title, body) {
+      const msg = `*${title}*\n${body}\n\nMore updates: ${window.location.origin}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function renderAll() {
+      // 1. Events
+      const evBox = document.getElementById('events-list');
+      document.getElementById('event-count').textContent = cache.events.length ? `${cache.events.length} updates` : '';
+      if (!cache.events.length) {
+        evBox.innerHTML = `
+          <div class="bg-white p-6 rounded-2xl border border-amber-200/70 shadow-sm text-center col-span-full">
+            <p class="text-sm font-medium text-stone-700">No upcoming sancharam or utsavams posted yet.</p>
+            <p class="text-xs text-stone-500 mt-1">Check back soon for Purattasi Magam & Thirumaligai announcements.</p>
+          </div>`;
+      } else {
+        evBox.innerHTML = cache.events.map(e => {
+          const title = lang === 'ta' && e.title_ta ? e.title_ta : e.title_en;
+          const desc = lang === 'ta' && e.description_ta ? e.description_ta : (e.description_en || '');
+          return `
+          <article class="bg-white rounded-2xl shadow-sm border ${e.is_pinned ? 'border-amber-500 ring-2 ring-amber-500/20 col-span-full' : 'border-amber-200/70'} overflow-hidden flex flex-col justify-between">
+            <div>
+              ${e.poster_url ? `<img src="${e.poster_url}" alt="Patrika" loading="lazy" class="w-full max-h-80 object-contain bg-amber-50/50 border-b border-amber-100" />` : ''}
+              <div class="p-5">
+                <div class="flex items-start justify-between gap-2">
+                  <h3 class="font-bold text-stone-900 text-base leading-snug">${title}</h3>
+                  ${e.is_pinned ? '<span class="shrink-0 text-[10px] uppercase tracking-wider bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded-full font-bold">Featured</span>' : ''}
+                </div>
+                <div class="flex flex-wrap gap-2 text-xs text-amber-800 font-semibold mt-2">
+                  ${e.event_date ? `<span class="bg-amber-50 px-2.5 py-0.5 rounded-md border border-amber-200">📅 ${e.event_date}</span>` : ''}
+                  ${e.location ? `<span class="bg-amber-50 px-2.5 py-0.5 rounded-md border border-amber-200">📍 ${e.location}</span>` : ''}
+                </div>
+                <p class="text-sm text-stone-600 mt-3 whitespace-pre-line leading-relaxed">${desc}</p>
+              </div>
+            </div>
+            <div class="px-5 py-3 bg-stone-50 border-t border-stone-100 flex justify-end">
+              <button onclick="shareWhatsApp(\`${title.replace(/`/g, '')}\`, \`${(e.event_date || '') + ' ' + (e.location || '')}\`)"
+                class="text-xs font-semibold text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
+                Share on WhatsApp ↗
+              </button>
+            </div>
+          </article>`;
+        }).join('');
+      }
+
+      // 2. Thaniyans
+      renderThaniyans();
+
+      // 3. Lineage
+      const lnBox = document.getElementById('lineage-list');
+      if (!cache.lineage.length) {
+        lnBox.innerHTML = `<p class="text-xs text-stone-500">Connect Supabase keys in config.js to load Guru Parampara.</p>`;
+      } else {
+        lnBox.innerHTML = cache.lineage.map((n, idx) => `
+          <div class="relative bg-white p-4 rounded-2xl border border-amber-200/70 shadow-sm hover:border-amber-400 transition">
+            <span class="w-3.5 h-3.5 bg-amber-600 rounded-full absolute -left-[33px] top-5 ring-4 ring-[#FDFBF7]"></span>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="font-bold text-stone-900 text-sm sm:text-base">
+                <span class="text-amber-700 mr-1">#${idx + 1}</span>
+                ${lang === 'ta' && n.name_ta ? n.name_ta : n.name_en}
+              </h3>
+              ${n.era_or_star ? `<span class="text-[11px] bg-amber-50 text-amber-900 border border-amber-200 px-2.5 py-0.5 rounded-full font-semibold">${n.era_or_star}</span>` : ''}
+            </div>
+            <p class="text-xs sm:text-sm text-stone-600 mt-1.5 leading-relaxed">${lang === 'ta' && n.bio_ta ? n.bio_ta : (n.bio_en || '')}</p>
+          </div>
+        `).join('');
+      }
+
+      // 4. History
+      const hist = cache.content.find(c => c.section_key === 'history');
+      const histSec = document.getElementById('history-sec');
+      const navHist = document.getElementById('nav-hist');
+      if (hist && (hist.body_en || hist.body_ta)) {
+        histSec.classList.remove('hidden');
+        navHist.classList.remove('hidden');
+        document.getElementById('history-body').textContent = lang === 'ta' && hist.body_ta ? hist.body_ta : hist.body_en;
+      } else {
+        histSec.classList.add('hidden');
+        navHist.classList.add('hidden');
+      }
+    }
+
+    function renderThaniyans() {
+      const mode = document.getElementById('script-select').value;
+      const box = document.getElementById('thaniyans-list');
+      if (!cache.thaniyans.length) {
+        box.innerHTML = `<p class="text-xs text-stone-500">Connect Supabase keys in config.js to load Thaniyans.</p>`;
+        return;
+      }
+      box.innerHTML = cache.thaniyans.map(t => `
+        <div class="bg-gradient-to-br from-white to-amber-50/40 p-5 rounded-2xl shadow-sm border border-amber-200/80 space-y-3">
+          <div class="flex items-center justify-between gap-2 border-b border-amber-100 pb-2">
+            <h3 class="font-heritage font-bold text-sm sm:text-base text-[#5C1A0B]">${t.title}</h3>
+            <button onclick="copyText(\`${(t.tamil_text + '\n' + (t.english_iast || '')).replace(/`/g, '')}\`, this)"
+              class="text-[11px] bg-amber-100 hover:bg-amber-200 text-amber-950 font-semibold px-2.5 py-1 rounded-lg transition">
+              Copy
+            </button>
+          </div>
+          ${mode !== 'english' ? `<p class="font-tamil text-sm sm:text-base font-semibold text-stone-900 whitespace-pre-line leading-loose">${t.tamil_text}</p>` : ''}
+          ${mode !== 'tamil' && t.english_iast ? `<p class="text-xs sm:text-sm italic text-stone-600 whitespace-pre-line leading-relaxed">${t.english_iast}</p>` : ''}
+          ${t.meaning ? `<p class="text-xs text-stone-500 bg-white/80 p-3 rounded-xl border border-amber-100">${t.meaning}</p>` : ''}
+        </div>
+      `).join('');
+    }
+
+    async function loadData() {
+      const saved = localStorage.getItem('thirumaligai_cache_v2');
+      if (saved) { cache = JSON.parse(saved); renderAll(); }
+
+      const [ev, th, ln, ct] = await Promise.all([
+        sb.from('events').select('*').order('is_pinned', { ascending: false }).order('event_date', { ascending: false }),
+        sb.from('thaniyans').select('*').order('sort_order', { ascending: true }),
+        sb.from('parampara_nodes').select('*').order('sort_order', { ascending: true }),
+        sb.from('site_content').select('*')
+      ]);
+
+      if (ev.data) cache.events = ev.data;
+      if (th.data) cache.thaniyans = th.data;
+      if (ln.data) cache.lineage = ln.data;
+      if (ct.data) cache.content = ct.data;
+
+      localStorage.setItem('thirumaligai_cache_v2', JSON.stringify(cache));
       renderAll();
     }
 
