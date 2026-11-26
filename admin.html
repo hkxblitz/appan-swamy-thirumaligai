@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thirumaligai Admin PWA</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#9a3412" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-stone-100 text-stone-800 pb-20">
+
+  <!-- Login Screen -->
+  <div id="login-box" class="max-w-sm mx-auto mt-20 bg-white p-6 rounded-2xl shadow">
+    <h1 class="text-lg font-bold text-orange-900 mb-4">Shishya Admin Login</h1>
+    <input id="email" type="email" placeholder="Admin Email" class="w-full border p-2.5 rounded-lg mb-3 text-sm" />
+    <input id="password" type="password" placeholder="Password" class="w-full border p-2.5 rounded-lg mb-4 text-sm" />
+    <button onclick="login()" class="w-full bg-orange-800 text-white py-2.5 rounded-lg font-semibold text-sm">Sign In</button>
+    <p id="auth-msg" class="text-xs text-red-600 mt-2"></p>
+  </div>
+
+  <!-- Admin App -->
+  <div id="app-box" class="hidden max-w-xl mx-auto p-4 space-y-6">
+    <div class="flex justify-between items-center bg-orange-900 text-white p-3 rounded-xl">
+      <span class="font-bold text-sm">Thirumaligai CMS</span>
+      <div class="space-x-2">
+        <button onclick="exportBackup()" class="text-xs bg-orange-700 px-2.5 py-1 rounded">Backup JSON</button>
+        <button onclick="logout()" class="text-xs bg-stone-800 px-2.5 py-1 rounded">Logout</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl shadow-sm text-xs font-semibold">
+      <button onclick="showTab('ev')" class="py-2 rounded-lg bg-orange-100 text-orange-900 tab-btn" id="btn-ev">Events</button>
+      <button onclick="showTab('th')" class="py-2 rounded-lg text-stone-600 tab-btn" id="btn-th">Thaniyans</button>
+      <button onclick="showTab('ln')" class="py-2 rounded-lg text-stone-600 tab-btn" id="btn-ln">Lineage</button>
+      <button onclick="showTab('hi')" class="py-2 rounded-lg text-stone-600 tab-btn" id="btn-hi">History</button>
+    </div>
+
+    <!-- Tab 1: Events -->
+    <div id="tab-ev" class="tab-pane space-y-4">
+      <div class="bg-white p-4 rounded-xl shadow-sm space-y-3">
+        <h2 class="font-bold text-sm">Post New Announcement</h2>
+        <input id="ev-title" placeholder="Title (English)" class="w-full border p-2 rounded text-sm" />
+        <input id="ev-title-ta" placeholder="தலைப்பு (Tamil - optional)" class="w-full border p-2 rounded text-sm" />
+        <div class="grid grid-cols-2 gap-2">
+          <input id="ev-date" type="date" class="border p-2 rounded text-sm" />
+          <input id="ev-loc" placeholder="Location (e.g. Kanchipuram)" class="border p-2 rounded text-sm" />
+        </div>
+        <textarea id="ev-desc" rows="3" placeholder="Details (English)" class="w-full border p-2 rounded text-sm"></textarea>
+        <textarea id="ev-desc-ta" rows="2" placeholder="விவரங்கள் (Tamil - optional)" class="w-full border p-2 rounded text-sm"></textarea>
+        <div class="flex items-center justify-between text-xs">
+          <label class="flex items-center gap-2"><input type="checkbox" id="ev-pin" /> Pin to top</label>
+          <input type="file" id="ev-file" accept="image/*" class="text-xs" />
+        </div>
+        <button onclick="addEvent()" id="ev-submit" class="w-full bg-orange-800 text-white py-2 rounded-lg font-semibold text-sm">Publish Event</button>
+      </div>
+      <div id="admin-events" class="space-y-2"></div>
+    </div>
+
+    <!-- Tab 2: Thaniyans -->
+    <div id="tab-th" class="tab-pane hidden space-y-4">
+      <div class="bg-white p-4 rounded-xl shadow-sm space-y-3">
+        <h2 class="font-bold text-sm">Add Thaniyan / Stotram</h2>
+        <input id="th-title" placeholder="Acharya / Stotram Name" class="w-full border p-2 rounded text-sm" />
+        <textarea id="th-ta" rows="3" placeholder="Tamil Script" class="w-full border p-2 rounded text-sm"></textarea>
+        <textarea id="th-en" rows="3" placeholder="English IAST Transliteration" class="w-full border p-2 rounded text-sm"></textarea>
+        <input id="th-order" type="number" value="10" placeholder="Sort Order (1, 2, 3...)" class="w-full border p-2 rounded text-sm" />
+        <button onclick="addThaniyan()" class="w-full bg-orange-800 text-white py-2 rounded-lg font-semibold text-sm">Save Thaniyan</button>
+      </div>
+      <div id="admin-thaniyans" class="space-y-2"></div>
+    </div>
+
+    <!-- Tab 3: Lineage -->
+    <div id="tab-ln" class="tab-pane hidden space-y-4">
+      <div class="bg-white p-4 rounded-xl shadow-sm space-y-3">
+        <h2 class="font-bold text-sm">Add Guru Parampara Node</h2>
+        <input id="ln-name" placeholder="Acharya Name (English)" class="w-full border p-2 rounded text-sm" />
+        <input id="ln-name-ta" placeholder="ஆசார்யர் பெயர் (Tamil)" class="w-full border p-2 rounded text-sm" />
+        <input id="ln-star" placeholder="Thirunakshatram / Era (e.g. Purattasi Magam)" class="w-full border p-2 rounded text-sm" />
+        <textarea id="ln-bio" rows="2" placeholder="Short Bio (English)" class="w-full border p-2 rounded text-sm"></textarea>
+        <input id="ln-order" type="number" value="10" placeholder="Order Number (1 = earliest)" class="w-full border p-2 rounded text-sm" />
+        <button onclick="addLineage()" class="w-full bg-orange-800 text-white py-2 rounded-lg font-semibold text-sm">Add to Tree</button>
+      </div>
+      <div id="admin-lineage" class="space-y-2"></div>
+    </div>
+
+    <!-- Tab 4: History -->
+    <div id="tab-hi" class="tab-pane hidden bg-white p-4 rounded-xl shadow-sm space-y-3">
+      <h2 class="font-bold text-sm">Edit Thirumaligai History</h2>
+      <textarea id="hi-en" rows="6" placeholder="History in English..." class="w-full border p-2 rounded text-sm"></textarea>
+      <textarea id="hi-ta" rows="6" placeholder="வரலாறு (Tamil)..." class="w-full border p-2 rounded text-sm"></textarea>
+      <button onclick="saveHistory()" class="w-full bg-orange-800 text-white py-2 rounded-lg font-semibold text-sm">Update History</button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    async function checkAuth() {
+      const { data: { session } } = await sb.auth.getSession();
+      document.getElementById('login-box').classList.toggle('hidden', !!session);
+      document.getElementById('app-box').classList.toggle('hidden', !session);
+      if (session) loadAdminLists();
+    }
+
+    async function login() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      if (error) document.getElementById('auth-msg').textContent = error.message;
+      else checkAuth();
+    }
+
+    async function logout() { await sb.auth.signOut(); checkAuth(); }
+
+    function showTab(t) {
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
+      document.getElementById('tab-' + t).classList.remove('hidden');
+      document.querySelectorAll('.tab-btn').forEach(b => b.className = 'py-2 rounded-lg text-stone-600 tab-btn');
+      document.getElementById('btn-' + t).className = 'py-2 rounded-lg bg-orange-100 text-orange-900 tab-btn';
+    }
+
+    async function addEvent() {
+      const btn = document.getElementById('ev-submit');
+      btn.textContent = 'Publishing...';
+      let poster_url = null;
+      const file = document.getElementById('ev-file').files[0];
+      if (file) {
+        const path = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+        const { error: upErr } = await sb.storage.from('posters').upload(path, file);
+        if (!upErr) {
+          poster_url = sb.storage.from('posters').getPublicUrl(path).data.publicUrl;
+        }
+      }
+      await sb.from('events').insert({
+        title_en: document.getElementById('ev-title').value,
+        title_ta: document.getElementById('ev-title-ta').value,
+        event_date: document.getElementById('ev-date').value || null,
+        location: document.getElementById('ev-loc').value,
+        description_en: document.getElementById('ev-desc').value,
+        description_ta: document.getElementById('ev-desc-ta').value,
+        is_pinned: document.getElementById('ev-pin').checked,
+        poster_url
+      });
+      btn.textContent = 'Publish Event';
+      loadAdminLists();
+    }
+
+    async function addThaniyan() {
+      await sb.from('thaniyans').insert({
+        title: document.getElementById('th-title').value,
+        tamil_text: document.getElementById('th-ta').value,
+        english_iast: document.getElementById('th-en').value,
+        sort_order: parseInt(document.getElementById('th-order').value || 10)
+      });
+      loadAdminLists();
+    }
+
+    async function addLineage() {
+      await sb.from('parampara_nodes').insert({
+        name_en: document.getElementById('ln-name').value,
+        name_ta: document.getElementById('ln-name-ta').value,
+        era_or_star: document.getElementById('ln-star').value,
+        bio_en: document.getElementById('ln-bio').value,
+        sort_order: parseInt(document.getElementById('ln-order').value || 10)
+      });
+      loadAdminLists();
+    }
+
+    async function saveHistory() {
+      await sb.from('site_content').upsert({
+        section_key: 'history',
+        body_en: document.getElementById('hi-en').value,
+        body_ta: document.getElementById('hi-ta').value
+      }, { onConflict: 'section_key' });
+      alert('History updated!');
+    }
+
+    async function delRow(table, id) {
+      if (!confirm('Delete this item?')) return;
+      await sb.from(table).delete().eq('id', id);
+      loadAdminLists();
+    }
+
+    async function loadAdminLists() {
+      const [ev, th, ln, ct] = await Promise.all([
+        sb.from('events').select('*').order('created_at', { ascending: false }),
+        sb.from('thaniyans').select('*').order('sort_order'),
+        sb.from('parampara_nodes').select('*').order('sort_order'),
+        sb.from('site_content').select('*').eq('section_key', 'history').maybeSingle()
+      ]);
+
+      document.getElementById('admin-events').innerHTML = (ev.data || []).map(x =>
+        `<div class="bg-white p-3 rounded-lg flex justify-between items-center text-xs shadow-sm">
+          <span><b>${x.title_en}</b> (${x.event_date || 'No date'})</span>
+          <button onclick="delRow('events','${x.id}')" class="text-red-600 font-bold px-2">Delete</button>
+        </div>`).join('');
+
+      document.getElementById('admin-thaniyans').innerHTML = (th.data || []).map(x =>
+        `<div class="bg-white p-3 rounded-lg flex justify-between items-center text-xs shadow-sm">
+          <span>#${x.sort_order} <b>${x.title}</b></span>
+          <button onclick="delRow('thaniyans','${x.id}')" class="text-red-600 font-bold px-2">Delete</button>
+        </div>`).join('');
+
+      document.getElementById('admin-lineage').innerHTML = (ln.data || []).map(x =>
+        `<div class="bg-white p-3 rounded-lg flex justify-between items-center text-xs shadow-sm">
+          <span>#${x.sort_order} <b>${x.name_en}</b></span>
+          <button onclick="delRow('parampara_nodes','${x.id}')" class="text-red-600 font-bold px-2">Delete</button>
+        </div>`).join('');
+
+      if (ct.data) {
+        document.getElementById('hi-en').value = ct.data.body_en || '';
+        document.getElementById('hi-ta').value = ct.data.body_ta || '';
+      }
+    }
+
+    async function exportBackup() {
+      const [ev, th, ln, ct] = await Promise.all([
+        sb.from('events').select('*'), sb.from('thaniyans').select('*'),
+        sb.from('parampara_nodes').select('*'), sb.from('site_content').select('*')
+      ]);
+      const blob = new Blob([JSON.stringify({ events: ev.data, thaniyans: th.data, lineage: ln.data, content: ct.data }, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `thirumaligai-backup-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+    }
+
+    checkAuth();
+  </script>
+</body>
+</html>
